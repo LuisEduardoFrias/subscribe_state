@@ -1,0 +1,44 @@
+/** @format */
+
+.showData_container {
+	font-family: "Courier New", monospace;
+	height: 200px;
+	background-color: #2c2929;
+	color: #ffffff;
+	padding: 10px;
+	border-radius: 5px;
+	white-space: pre;
+	overflow-y: scroll;
+}
+
+.person {
+	margin-inline-start: 10px;
+}
+
+.obj_open {
+	margin-inline-start: 0;
+}
+
+.array_open {
+	margin-inline-start: 5px;
+}
+
+.obj_open2 {
+	margin-inline-start: 10px;
+}
+
+.prop_container {
+	margin-inline-start: 20px;
+}
+
+.obj_close2 {
+	margin-inline-start: 10px;
+}
+
+.array_close {
+	margin-inline-start: 5px;
+}
+
+.obj_close {
+	margin-inline-start: 0;
+}

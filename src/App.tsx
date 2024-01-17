@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+/** @format */
 
-function App() {
-  const [count, setCount] = useState(0)
+import React, { Suspense, lazy } from "react";
+const ShowData = React.lazy(() => import("./components/show_data"));
+const FormData = React.lazy(() => import("./components/form_data"));
+const ThemeConfiguration = React.lazy(
+	() => import("./components/theme_configuration")
+);
+import Component from "./components/components";
+//
+import initialState from "./helpers/initial_state";
+import useSuperState from "./hook/use_super_state";
+import Reducer from "./helpers/reducer";
+import "./styles/app.css";
+//
+export default function App() {
+	const [state, dispatch] = useSuperState(Reducer, initialState(), ["taping"]);
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	return (
+		<>
+			<h1>Test UseSuperState</h1>
+			<div className='app_pronter'>
+				<span className='app_taping'>Writing...</span>
+			</div>
+					<Component />
+			<div className='app_components'>
+				<Suspense fallback={<div>Loading...</div>}>
+					<ShowData />
+					<FormData />
+					<ThemeConfiguration />
+				</Suspense>
+			</div>
+		</>
+	);
 }
-
-export default App

@@ -15,16 +15,20 @@ export default function ThemeConfiguration() {
 		"formStyle"
 	]);
 
+	console.log(
+		"ThemeConfiguration : \n_____________\n" + JSON.stringify(state, null, 2)
+	);
+
 	function handleChange(evert: any) {
 		const value = evert.target.value;
 		const objectPro = evert.target.name.split("_");
 
 		if (objectPro[0] === "appStyle") {
-			dispatch({ type: actions.hdhd, value, prop: objectPro[1] });
+			dispatch({ type: actions.updateAppStyle, value, prop: objectPro[1] });
 		} else if (objectPro[0] === "formStyle") {
-			dispatch({ type: actions.hdhd, value, prop: objectPro[1] });
+			dispatch({ type: actions.updateFormStyle, value, prop: objectPro[1] });
 		} else {
-			dispatch({ type: actions.hdhd, value });
+			dispatch({ type: actions.updateFontFamily, value });
 		}
 	}
 
@@ -77,7 +81,7 @@ export default function ThemeConfiguration() {
 						<label htmlFor='form_bc'>Background</label>
 						<input
 							type='color'
-							name='formStyle_backgroundColo'
+							name='formStyle_backgroundColor'
 							id='form_bc'
 							value={state.formStyle.backgroundColor}
 							onChange={handleChange}
@@ -122,7 +126,6 @@ export default function ThemeConfiguration() {
 							<option value='Arial, sans-serif'>Arial</option>
 							<option value="'Times New Roman', serif">Times New Roman</option>
 							<option value="'Courier New', monospace">Courier New</option>
-							<option value='Verdana, sans-serif'>Verdana</option>
 						</select>
 					</fieldset>
 				</div>

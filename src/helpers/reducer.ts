@@ -27,8 +27,11 @@ export default function Reducer(state: any, action: any) {
 			return { ...state, name: action.value };
 		},
 		updateJsonStyle: () => {
-			state.jsonStyle[action.prop] = action.value;
-			return { ...state };
+			const updatedJsonStyle = {
+				...state.jsonStyle,
+				[action.prop]: action.value
+			};
+			return { ...state, jsonStyle: updatedJsonStyle };
 		},
 		updateAppStyle: () => {
 			state.appStyle[action.prop] = action.value;
@@ -42,7 +45,7 @@ export default function Reducer(state: any, action: any) {
 			return { ...state, fontFamily: action.value };
 		},
 		updatePersons: () => {
-			state.persons[action.index] = action.value;
+			state.persons[action.index][action.prop] = action.value;
 			return { ...state };
 		}
 	};

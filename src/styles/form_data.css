@@ -1,8 +1,8 @@
 /** @format */
 
 .formData_container {
+	font-family: inherit;
 	width: 100%;
-	
 	padding: 10px;
 	background-color: #e17b7b;
 	border-radius: 10px;

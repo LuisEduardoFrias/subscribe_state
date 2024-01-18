@@ -1,6 +1,6 @@
 /** @format */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import initialState from "../helpers/initial_state";
 import useSuperState from "../hook/use_super_state";
 import Reducer, { actions } from "../helpers/reducer";
@@ -9,7 +9,22 @@ import "../styles/form_data.css";
 //
 export default function FormData() {
 	const [index, setIndex] = useState(0);
-	const [state, dispatch] = useSuperState(Reducer, initialState(), ["persons"]);
+	const [state, dispatch] = useSuperState(Reducer, initialState(), [
+		"persons",
+		"formStyle"
+	]);
+
+	useEffect(() => {
+	//	alert(JSON.stringify(state.persons, null, 2));
+	}, [state.persons]);
+
+	console.log("FormData : \n_____________\n" + JSON.stringify(state, null, 2));
+
+	const _styles: React.CSSProperty = {
+		backgroundColor: `${state.formStyle.backgroundColor}`,
+		color: `${state.formStyle.textColor}`,
+		fontSize: `${state.formStyle.titleSize}px`
+	};
 
 	function handleSubmit(
 		data: object[],
@@ -23,6 +38,7 @@ export default function FormData() {
 			dispatch({
 				type: actions.updatePersons,
 				index,
+				prop: event.target.name,
 				value: event.target.value
 			});
 		}
@@ -31,7 +47,7 @@ export default function FormData() {
 	return (
 		<div className='component'>
 			<span className='comp_name'>Form Data</span>
-			<div className='formData_container'>
+			<div style={_styles} className='formData_container'>
 				<Form onSubmit={handleSubmit}>
 					<select name='persons' onChange={handleChange}>
 						{state.persons.map(
@@ -48,9 +64,10 @@ export default function FormData() {
 								<label htmlFor={key}>{firtsUC(key)}</label>
 								<input
 									type={checkType(key, state.persons)}
-									autocomplete='off'
+									autoComplete='off'
 									onChange={handleChange}
 									name={key}
+									defaultValue={state.persons[index][key]}
 									defaultValue={state.persons[index][key]}
 									id={key}
 								/>

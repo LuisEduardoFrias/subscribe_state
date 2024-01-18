@@ -5,7 +5,7 @@ import useSuperState from "../hook/use_super_state";
 import Reducer from "../helpers/reducer";
 
 //const Component5 = React.memo(
-	function Component5() {
+function Component5() {
 	const [state, dispatch] = useSuperState(Reducer, initialState(), [
 		"volume",
 		"name"
@@ -17,6 +17,7 @@ import Reducer from "../helpers/reducer";
 		<div
 			style={{
 				display: "flex",
+				fontFamily: "inherit",
 				flexDirection: "column",
 				width: "100%",
 				boxSizen: "border-box",

@@ -29,6 +29,7 @@ h1 {
 }
 
 .app_pronter {
+	font-family: Arial;
 	width: 90%;
 	height: 50px;
 	border-radius: 10px;
@@ -42,14 +43,12 @@ h1 {
 }
 
 .app_components {
-	width: 90%;
-	height: 1000px;
+	width: 400px;
 	border: 0px solid #40333fd8;
 	margin: auto;
-
+	padding-block-end: 20px;
 	display: flex;
 	flex-direction: column;
-	flex-wrap: wrap;
 	gap: 10px;
 }
 

@@ -6,7 +6,11 @@ import React, { useReducer } from "react";
 type Action<T extends any, P = undefined> = P extends undefined
 	? { type: T }
 	: { type: T } & P;
-type Subscriber = { props: string[]; wasCalled: boolean; disp: Action };
+type Subscriber = {
+	props: string[];
+	wasCalled: boolean;
+	disp: (action: Action) => object;
+};
 type Reducer = (state: object, action: Action) => object;
 
 //Constans
@@ -15,20 +19,29 @@ const subscriber: Subscriber = {};
 const globalState: object = {};
 
 //subscribe the components
-function subscribe(props: string[], id: string): void {
+function subscribe(
+	props: string[],
+	id: string,
+	dispatch: (action: Action) => object
+): void {
 	if (!subscriber[id]) {
 		Reflect.set(subscriber, id, {
 			props,
 			wasCalled: false,
-			disp: null
+			disp: dispatch
 		});
 	}
+}
+
+//clone object
+function clone(obj: object) {
+	return JSON.parse(JSON.stringify(obj));
 }
 
 //intermediador del dispatch
 function middledistpach(action: Action, reducer: Reducer): void {
 	//
-	const newState: object = reducer({ ...globalState }, action);
+	const newState: object = reducer(clone(globalState), action);
 
 	const changedProperties = getChangedProperties(globalState, newState);
 
@@ -54,7 +67,8 @@ function middledistpach(action: Action, reducer: Reducer): void {
 function getChangedProperties(oldState: object, newState: object): string[] {
 	const changedProperties: string[] = [];
 	for (const key in newState) {
-		if (oldState[key] !== newState[key]) changedProperties.push(key);
+		if (JSON.stringify(oldState[key]) !== JSON.stringify(newState[key]))
+			changedProperties.push(key);
 	}
 	return changedProperties;
 }
@@ -100,11 +114,12 @@ export default function useSuperState(
 
 	const [state, dispatch] = useReducer(middlereducer, initalState);
 
+	console.log("state updated");
 	//Octiene el nombre del componente
 	const callerFunction = new Error().stack?.split("\n")[2].trim().split(" ")[1];
 
 	//suscribe el componentes
-	subscribe(props, callerFunction);
+	subscribe(props, callerFunction, dispatch);
 
 	//Inicializa el estado global
 	if (Reflect.ownKeys(globalState).length === 0) {
@@ -112,10 +127,11 @@ export default function useSuperState(
 			Reflect.set(globalState, e, initalState[e])
 		);
 	}
+
 	//Añade el dispatch al suscriptor
-	if (!subscriber[callerFunction].disp) {
-		Reflect.set(subscriber[callerFunction], "disp", dispatch);
-	}
+	/*	if (!subscriber[callerFunction].disp) {
+	  	Reflect.set(subscriber[callerFunction], "disp", dispatch);
+	} */
 
 	return [
 		returnStateForSubscribe(globalState, callerFunction),

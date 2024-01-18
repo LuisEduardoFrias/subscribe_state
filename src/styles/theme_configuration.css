@@ -1,6 +1,7 @@
 /** @format */
 
 .themeConf {
+	font-family: inherit;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;

@@ -34,20 +34,20 @@ export default function initialState() {
 		],
 		fontFamily: "Arial",
 		appStyle: {
-			backgroundColor: "#bae17b",
-			textColor: "#e17b9f",
-			titleSize: "12"
+			backgroundColor: "#b064b0",
+			textColor: "#000000",
+			titleSize: "14"
 		},
 		formStyle: {
-			backgroundColor: "#d77be1",
-			textColor: "#7b9ce1",
-			titleSize: "12"
+			backgroundColor: "#e17b7b",
+			textColor: "#000000",
+			titleSize: "14"
 		},
 		jsonStyle: {
 			braces: "#f7d181",
 			squareBrackets: "#f3b802",
-			colonComma: "#5a5a5a",
-			quotationMarks: "#00c1fb",
+			colonComma: "#ee0000",
+			quotationMarks: "#9c6500",
 			key: "#efa600",
 			value: "#14d600"
 		}

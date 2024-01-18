@@ -19,16 +19,21 @@ export default function Component() {
 	return (
 		<div
 			style={{
-				display: "flex",
-				flexDirection: "column",
-				width: "200px",
-				margin: "20px",
+				fontFamily: "inherit",
+				width: "100%",
 				padding: "10px",
-				border: "2px solid #6b6868de",
-				boxSizen: "border-box",
-				gap: "15px",
+				backgroundColor: "#373737",
+				borderRadius: "10px",
 				color: "white",
-				backgroundColor: "#373737"
+				border: "2px solid #6b6868de",
+				boxSizing: "border-box",
+
+				display: "flex",
+				flexDirection: "row",
+				flexWrap: "wrap",
+				alignItems: "center",
+				justifyContent: "center",
+				gap: "15px"
 			}}>
 			<div style={{ display: "flex", flexDirection: "column" }}>
 				<div
@@ -75,9 +80,10 @@ function Component2() {
 	return (
 		<div
 			style={{
+				fontFamily: "inherit",
 				display: "flex",
 				flexDirection: "column",
-				width: "100%",
+				width: "calc(100% - 15px)",
 				boxSizen: "border-box",
 				padding: "10px",
 				gap: "15px",
@@ -120,7 +126,7 @@ function Component2() {
 
 export function Component3() {
 	const [state, dispatch] = useSuperState(Reducer, initialState(), [
-		"color",
+		"volume",
 		"age"
 	]);
 
@@ -129,9 +135,63 @@ export function Component3() {
 	return (
 		<div
 			style={{
+				fontFamily: "inherit",
 				display: "flex",
 				flexDirection: "column",
-				width: "100%",
+				width: "calc(100% - 15px)",
+				boxSizen: "border-box",
+				padding: "10px",
+				gap: "15px",
+				color: "white",
+				border: "2px solid #ddd400",
+				backgroundColor: "#757000"
+			}}>
+			<div
+				style={{
+					display: "flex",
+					flexDirection: "column",
+					margin: "3px",
+					gap: "5px"
+				}}>
+				<span>Componente 3</span>
+				<hr />
+				<button
+					onClick={() => {
+						dispatch({ type: "up_age", value: state.age - 1 });
+					}}
+					style={{ width: "100%" }}>
+					Disminuir edad
+				</button>
+				<br />
+				<input
+					type='range'
+					value={state.volume}
+					onChange={event => {
+						dispatch({ type: "change_volume", value: event.target.value });
+					}}
+				/>
+				<br />
+			</div>
+		</div>
+	);
+}
+
+//export const Component4 = React.memo(
+function Component4() {
+	const [state, dispatch] = useSuperState(Reducer, initialState(), [
+		"color",
+		"age"
+	]);
+
+	console.log("cp 4 : " + JSON.stringify(state));
+
+	return (
+		<div
+			style={{
+				fontFamily: "inherit",
+				display: "flex",
+				flexDirection: "column",
+				width: "calc(100% - 15px)",
 				boxSizen: "border-box",
 				padding: "10px",
 				gap: "15px",
@@ -146,7 +206,7 @@ export function Component3() {
 					margin: "3px",
 					gap: "5px"
 				}}>
-				<span>Componente 3</span>
+				<span>Componente 4</span>
 				<hr />
 				<div>
 					<span>Color: </span>
@@ -169,58 +229,6 @@ export function Component3() {
 				<Suspense fallback={<div>Loading...</div>}>
 					<Component5 />
 				</Suspense>
-			</div>
-		</div>
-	);
-}
-
-//export const Component4 = React.memo(
-function Component4() {
-	const [state, dispatch] = useSuperState(Reducer, initialState(), [
-		"volume",
-		"age"
-	]);
-
-	console.log("cp 4 : " + JSON.stringify(state));
-
-	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				width: "100%",
-				boxSizen: "border-box",
-				padding: "10px",
-				gap: "15px",
-				color: "white",
-				border: "2px solid #ddd400",
-				backgroundColor: "#757000"
-			}}>
-			<div
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					margin: "3px",
-					gap: "5px"
-				}}>
-				<span>Componente 4</span>
-				<hr />
-				<button
-					onClick={() => {
-						dispatch({ type: "up_age", value: state.age - 1 });
-					}}
-					style={{ width: "100%" }}>
-					Disminuir edad
-				</button>
-				<br />
-				<input
-					type='range'
-					value={state.volume}
-					onChange={event => {
-						dispatch({ type: "change_volume", value: event.target.value });
-					}}
-				/>
-				<br />
 			</div>
 		</div>
 	);

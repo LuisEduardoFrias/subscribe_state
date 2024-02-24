@@ -6,7 +6,7 @@ import React, { useReducer } from "react";
 type Action<T extends any, P = undefined> = P extends undefined
 	? { type: T }
 	: { type: T } & P;
-type Subscriber = {
+type SUBACRIBER = {
 	props: string[];
 	wasCalled: boolean;
 	disp: (action: Action) => object;
@@ -15,8 +15,13 @@ type Reducer = (state: object, action: Action) => object;
 
 //Constans
 const UPDATE_OBTION_ID: string = "__update_obtion_id__";
-const subscriber: Subscriber = {};
-const globalState: object = {};
+const SUBACRIBER: SUBACRIBER = {};
+const GLOBALSTATE: object = {};
+
+//Compare two objcets
+export function Equal(obj1: any, obj2: any) {
+	return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
 
 //subscribe the components
 function subscribe(
@@ -24,8 +29,8 @@ function subscribe(
 	id: string,
 	dispatch: (action: Action) => object
 ): void {
-	if (!subscriber[id]) {
-		Reflect.set(subscriber, id, {
+	if (!SUBACRIBER[id]) {
+		Reflect.set(SUBACRIBER, id, {
 			props,
 			wasCalled: false,
 			disp: dispatch
@@ -33,33 +38,33 @@ function subscribe(
 	}
 }
 
-//clone object
-function clone(obj: object) {
-	return JSON.parse(JSON.stringify(obj));
+//Clone object
+function Clone(obj: object) {
+	return { ...JSON.parse(JSON.stringify(obj)) };
 }
 
 //intermediador del dispatch
 function middledistpach(action: Action, reducer: Reducer): void {
 	//
-	const newState: object = reducer(clone(globalState), action);
+	const newState: object = reducer(Clone(GLOBALSTATE), action);
 
-	const changedProperties = getChangedProperties(globalState, newState);
+	const changedProperties = getChangedProperties(GLOBALSTATE, newState);
 
 	updateGlobalState(newState, changedProperties);
 
 	changedProperties.forEach((p: string) => {
-		for (let key in subscriber) {
-			subscriber[key].props.forEach((pr: string) => {
-				if (p === pr && subscriber[key].wasCalled === false) {
-					subscriber[key].disp({ type: UPDATE_OBTION_ID });
-					subscriber[key].wasCalled = true;
+		for (let key in SUBACRIBER) {
+			SUBACRIBER[key].props.forEach((pr: string) => {
+				if ((p === pr || pr === "all") && SUBACRIBER[key].wasCalled === false) {
+					SUBACRIBER[key].disp({ type: UPDATE_OBTION_ID });
+					SUBACRIBER[key].wasCalled = true;
 				}
 			});
 		}
 	});
 
-	for (let key in subscriber) {
-		subscriber[key].wasCalled = false;
+	for (let key in SUBACRIBER) {
+		SUBACRIBER[key].wasCalled = false;
 	}
 }
 
@@ -67,8 +72,7 @@ function middledistpach(action: Action, reducer: Reducer): void {
 function getChangedProperties(oldState: object, newState: object): string[] {
 	const changedProperties: string[] = [];
 	for (const key in newState) {
-		if (JSON.stringify(oldState[key]) !== JSON.stringify(newState[key]))
-			changedProperties.push(key);
+		if (!Equal(oldState[key], newState[key])) changedProperties.push(key);
 	}
 	return changedProperties;
 }
@@ -78,13 +82,13 @@ function updateGlobalState(
 	newState: object,
 	modifiedProperties: string[]
 ): void {
-	if (Reflect.ownKeys(globalState).length === 0) {
+	if (Reflect.ownKeys(GLOBALSTATE).length === 0) {
 		Reflect.ownKeys(newState).forEach((key: string) =>
-			Reflect.set(globalState, key, newState[key])
+			Reflect.set(GLOBALSTATE, key, newState[key])
 		);
 	} else {
 		modifiedProperties.forEach((key: string) => {
-			Reflect.set(globalState, key, newState[key]);
+			Reflect.set(GLOBALSTATE, key, newState[key]);
 		});
 	}
 }
@@ -93,17 +97,22 @@ function updateGlobalState(
 export default function useSuperState(
 	reducer: Reducer,
 	initalState: object,
-	props: string[]
+	props: string[],
+	postDispatch?: (
+		action: Action,
+		state: object,
+		dispatch: (action: Action) => void
+	) => void
 ) {
 	function middlereducer(state: object, action: Action): object {
 		//se ejecuta cuando se requiere actializar el estado de determ8nado suscriptor
 		if (action.type === UPDATE_OBTION_ID) {
 			return {
-				...globalState,
-				__obtionId__: globalState.__obtionId__
-					? globalState.__obtionId__ === 10
+				...GLOBALSTATE,
+				__obtionId__: GLOBALSTATE.__obtionId__
+					? GLOBALSTATE.__obtionId__ === 10
 						? 0
-						: globalState.__obtionId__ + 1
+						: GLOBALSTATE.__obtionId__ + 1
 					: 0
 			};
 		}
@@ -114,7 +123,7 @@ export default function useSuperState(
 
 	const [state, dispatch] = useReducer(middlereducer, initalState);
 
-	console.log("state updated");
+	//	console.log("state updated");
 	//Octiene el nombre del componente
 	const callerFunction = new Error().stack?.split("\n")[2].trim().split(" ")[1];
 
@@ -122,28 +131,38 @@ export default function useSuperState(
 	subscribe(props, callerFunction, dispatch);
 
 	//Inicializa el estado global
-	if (Reflect.ownKeys(globalState).length === 0) {
+	if (Reflect.ownKeys(GLOBALSTATE).length === 0) {
 		Reflect.ownKeys(initalState).forEach((e: string) =>
-			Reflect.set(globalState, e, initalState[e])
+			Reflect.set(GLOBALSTATE, e, initalState[e])
 		);
 	}
 
 	//Añade el dispatch al suscriptor
-	/*	if (!subscriber[callerFunction].disp) {
-	  	Reflect.set(subscriber[callerFunction], "disp", dispatch);
+	/*	if (!SUBACRIBER[callerFunction].disp) {
+	  	Reflect.set(SUBACRIBER[callerFunction], "disp", dispatch);
 	} */
 
 	return [
-		returnStateForSubscribe(globalState, callerFunction),
-		(value: Action) => middledistpach(value, reducer)
+		returnStateForSubscribe(GLOBALSTATE, callerFunction),
+		(action: Action) => {
+			if (postDispatch) {
+				postDispatch(action, GLOBALSTATE, (_action: Action) => {
+					middledistpach(_action, reducer);
+				});
+			} else {
+				middledistpach(action, reducer);
+			}
+		}
 	];
 }
 
 //retorna el estado con las propiedades especificas a las suscriptas.
 function returnStateForSubscribe(state: object, callerFunction: string) {
 	const newState = {};
-	if (subscriber[callerFunction])
-		subscriber[callerFunction].props.forEach((pr: string) => {
+	if (SUBACRIBER[callerFunction])
+		SUBACRIBER[callerFunction].props.forEach((pr: string) => {
+			if (pr === "all") return state;
+
 			Reflect.set(newState, pr, state[pr]);
 		});
 

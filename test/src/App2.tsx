@@ -8,14 +8,14 @@ const ThemeConfiguration = React.lazy(
 );
 import Component from "./components/components";
 //
+
 import initialState from "./helpers/initial_state";
-import useSuperState from "./hook/use_super_state";
+import useSuperState from "../../index.ts";
 import Reducer from "./helpers/reducer";
 import "./styles/app.css";
 //
 export default function App() {
 	const [state, dispatch] = useSuperState(Reducer, initialState(), [
-		"appStyle",
 		"fontFamily"
 	]);
 
@@ -32,7 +32,7 @@ export default function App() {
 		<div style={_styles}>
 			<h1>Test UseSuperState</h1>
 			<div className='app_pronter'>
-				<span className='app_taping'>Writing...</span>
+				<span className='app_taping'>W</span>
 			</div>
 			<div className='app_components'>
 				<Component />

@@ -2,7 +2,16 @@
 
 export default function initialState() {
 	return {
-		name: "luis eduardo",
+		isTyping: false,
+		text: "",
+		name: "Luis Eduardo Frias",
+		signature: "LuisE.F.",
+		age: 13
+	};
+}
+
+/*
+name: "luis eduardo",
 		age: 17,
 		color: "yellow",
 		volume: 30,
@@ -52,4 +61,4 @@ export default function initialState() {
 			value: "#14d600"
 		}
 	};
-}
+*/

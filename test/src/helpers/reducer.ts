@@ -1,6 +1,11 @@
 /** @format */
 
 export enum actions {
+	typing = "typing",
+	send_writed = "send_writed",
+	change_signature = "change_signature",
+	update_age = "update_age",
+
 	up_age = "up_age",
 	change_color = "change_color",
 	change_volume = "change_volume",
@@ -14,7 +19,25 @@ export enum actions {
 
 export default function Reducer(state: any, action: any) {
 	const _action = {
-		up_age: () => {
+		typing: () => {
+			return { ...state, isTyping: action.value };
+		},
+		send_writed: () => {
+			return { ...state, text: action.value };
+		},
+		change_signature: () => {
+			return { ...state, signature: action.value };
+		},
+		update_age: () => {
+			return { ...state, age: action.value };
+		}
+	};
+
+	return _action[action.type]();
+}
+
+/*
+up_age: () => {
 			return { ...state, age: action.value };
 		},
 		change_color: () => {
@@ -48,7 +71,4 @@ export default function Reducer(state: any, action: any) {
 			state.persons[action.index][action.prop] = action.value;
 			return { ...state };
 		}
-	};
-
-	return _action[action.type]();
-}
+*/

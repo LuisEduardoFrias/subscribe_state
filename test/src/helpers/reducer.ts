@@ -18,22 +18,31 @@ export enum actions {
 }
 
 export default function Reducer(state: any, action: any) {
+	//
 	const _action = {
 		typing: () => {
-			return { ...state, isTyping: action.value };
+			state.isTyping = action.value;
+			return state;
 		},
 		send_writed: () => {
-			return { ...state, text: action.value };
+			state.text = action.value;
+			return state;
 		},
 		change_signature: () => {
-			return { ...state, signature: action.value };
+			state.signature = action.value;
+			return state;
 		},
 		update_age: () => {
-			return { ...state, age: action.value };
+			state.age = action.value;
+			return state;
+		},
+		default: () => {
+			alert(`El type: ${action.type} no existe`);
+			return undefined;
 		}
 	};
 
-	return _action[action.type]();
+	return (_action[action.type] ?? _action["default"])();
 }
 
 /*

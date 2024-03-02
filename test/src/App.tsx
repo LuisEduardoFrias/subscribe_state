@@ -2,17 +2,13 @@
 
 import { useRef, useMemo } from "react";
 import DataPerson from "../src/components/data_person";
-import initialState from "./helpers/initial_state";
 import random_color from "./helpers/random_color";
-import useSuperState from "../../index.ts";
-import Reducer, { actions } from "./helpers/reducer";
+import { useSuperState } from "../../index.ts";
+import { actions } from "./helpers/reducer";
 import Styles from "./styles/app.module.css";
 //
 export default function App() {
-	const [state, dispatch] = useSuperState(Reducer, initialState(), [
-		"isTyping",
-		"text"
-	]);
+	const [state, dispatch] = useSuperState(["isTyping", "text"]);
 
 	const inputRef = useRef(null);
 	const timeoutRef = useRef(null);
@@ -66,7 +62,7 @@ export default function App() {
 						send
 					</button>
 				</div>
-				{MemoDataPerson }
+				{MemoDataPerson}
 			</div>
 		</div>
 	);

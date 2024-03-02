@@ -1,18 +1,13 @@
 /** @format */
 
 import { useRef } from "react";
-import initialState from "../helpers/initial_state";
 import random_color from "../helpers/random_color";
-import useSuperState from "../../../index.ts";
-import Reducer, { actions } from "../helpers/reducer";
+import { useSuperState } from "../../../index.ts";
+import { actions } from "../helpers/reducer";
 import Styles from "../styles/data_person.module.css";
 
 export default function DataPerson() {
-	const [state, dispatch] = useSuperState(Reducer, initialState(), [
-		"name",
-		"signature",
-		"age"
-	]);
+	const [state, dispatch] = useSuperState(["name", "signature", "age"]);
 
 	const inputRef = useRef(null);
 

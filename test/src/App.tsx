@@ -2,8 +2,11 @@
 
 import { useRef, useMemo } from "react";
 import DataPerson from "../src/components/data_person";
+import Achievements from "../src/components/achievements";
+import Actions from "../src/components/actions";
+import Person from "../src/components/person";
 import random_color from "./helpers/random_color";
-import { useSuperState } from "../../index.ts";
+import { useSuperState } from "../../index";
 import { actions } from "./helpers/reducer";
 import Styles from "./styles/app.module.css";
 //
@@ -16,6 +19,7 @@ export default function App() {
 	function handleChange(event: any) {
 		if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
+		//if (isTyping === false) 
 		dispatch({ type: actions.typing, value: true });
 
 		timeoutRef.current = setTimeout(() => {
@@ -58,11 +62,14 @@ export default function App() {
 						className={Styles.input}
 						onChange={handleChange}
 					/>
-					<button className={Styles.btn} onClick={handleClick}>
+					<button className="btn" onClick={handleClick}>
 						send
 					</button>
 				</div>
 				{MemoDataPerson}
+				<Achievements />
+				<Person />
+				<Actions />
 			</div>
 		</div>
 	);

@@ -7,7 +7,13 @@ import { actions } from "../helpers/reducer";
 import Styles from "../styles/data_person.module.css";
 
 export default function DataPerson() {
-	const [state, dispatch] = useSuperState(["name", "signature", "age"]);
+	const [state, dispatch] = useSuperState([
+		"name",
+		"signature",
+		"age",
+		"hasLicense",
+		"hasPension"
+	]);
 
 	const inputRef = useRef(null);
 
@@ -46,6 +52,18 @@ export default function DataPerson() {
 						{state.age}
 					</span>
 				</div>
+				{state.hasLicense && (
+					<div className={Styles.achievement}>
+						<span>{"Driver's license: "}</span>
+						<span>{"Category 2"}</span>
+					</div>
+				)}
+				{state.hasPension && (
+					<div className={Styles.achievement}>
+						<span>{"Pension: "}</span>
+						<span>{"amount of 10k monthly"}</span>
+					</div>
+				)}
 			</div>
 
 			<div className={Styles.panelWrite}>
@@ -55,7 +73,7 @@ export default function DataPerson() {
 					className={Styles.input}
 					onChange={handleChange}
 				/>
-				<button className={Styles.btn} onClick={handleClick}>
+				<button className="btn" onClick={handleClick}>
 					update age
 				</button>
 			</div>

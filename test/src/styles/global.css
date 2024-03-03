@@ -32,3 +32,18 @@ body {
 	top: 0;
 	right: 0;
 }
+
+.btn {
+	padding: 5px;
+	font-family: Arial;
+	font-weight: bold;
+	margin-inline: 5px;
+}
+
+.btn:active {
+	transform: scale(0.9);
+}
+
+/*.btn:hover {
+	transform: scale(0.9);
+}*/

@@ -19,4 +19,4 @@ export const ALL: string = "all";
 export const UPDATE_OBTION_ID: string = "__update_obtion_id__";
 export const SUB_CRIBER: SubCriber = {};
 export const GLOBAL_STATE: object = {};
-export let OutReducer: object = {};
+export const OutReducer: object = { };

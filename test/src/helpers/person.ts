@@ -25,6 +25,7 @@ export default class Person {
 				isEating: false
 			}
 		});
+		
 	}
 
 	talk() {
@@ -46,6 +47,7 @@ export default class Person {
 	}
 
 	wakeUp() {
+		alert("---- : " + this.isSleeping);
 		if (this.isSleeping)
 			this.dispatch({
 				type: "update_Person",

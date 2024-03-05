@@ -1,14 +1,14 @@
 /** @format */
 
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import random_color from "../helpers/random_color";
 import { useSuperState } from "../../../index.ts";
 import { actions } from "../helpers/reducer";
 import Styles from "../styles/data_person.module.css";
 
-export default function Person() {
+const Person = React.memo(function Person() {
 	const [state, dispatch] = useSuperState(["person"]);
-
+	
 	useEffect(() => {
 		state.person.dispatch = dispatch;
 	}, []);
@@ -61,4 +61,6 @@ export default function Person() {
 			</div>
 		</div>
 	);
-}
+});
+
+export default Person;

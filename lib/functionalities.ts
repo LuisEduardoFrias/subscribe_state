@@ -14,6 +14,14 @@ function Equal(obj1: any, obj2: any) {
 	return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
 
+export function setObj(obj: object, prop: string, value: any): void {
+	Reflect.set(obj, prop, value);
+}
+
+export function getKeys(obj: object): string[] {
+	return Reflect.ownKeys(obj);
+}
+
 //SubCribe the components
 export function SubCribe(
 	props: string[],
@@ -21,7 +29,7 @@ export function SubCribe(
 	dispatch: (action: Action) => object
 ): void {
 	if (!SUB_CRIBER[id]) {
-		Reflect.set(SUB_CRIBER, id, {
+		setObj(SUB_CRIBER, id, {
 			props,
 			wasCalled: false,
 			disp: dispatch
@@ -30,13 +38,61 @@ export function SubCribe(
 }
 
 //Clone object
-function Clone(obj: object) {
-	return { ...JSON.parse(JSON.stringify(obj)) };
+export function Clone(obj) {
+	const clonedObj = { ...JSON.parse(JSON.stringify(obj)) };
+	addMethods(clonedObj, obj);
+	return clonedObj;
+}
+
+function addMethods(clonedObj, originalObj) {
+	for (let prop in originalObj) {
+		if (Array.isArray(originalObj[prop])) {
+			clonedObj[prop] = originalObj[prop].slice();
+		} else if (
+			typeof originalObj[prop] === "object" &&
+			typeof originalObj[prop] !== "function" &&
+			originalObj[prop] !== null
+		) {
+			clonedObj[prop] = {};
+			addMethods(clonedObj[prop], originalObj[prop]);
+		} else if (
+			typeof originalObj[prop] === "function" &&
+			prop !== "constructor"
+		) {
+			clonedObj[prop] = originalObj[prop].bind(clonedObj);
+		} else {
+			clonedObj[prop] = originalObj[prop];
+		}
+	}
+	const prototype = Object.getPrototypeOf(originalObj);
+	if (prototype !== null) {
+		const prototypeMethods = Object.getOwnPropertyNames(prototype);
+		prototypeMethods.forEach(prop => {
+			if (typeof prototype[prop] === "function" && prop !== "constructor") {
+				clonedObj[prop] = prototype[prop].bind(clonedObj);
+			}
+		});
+	}
+}
+
+//Mapper an object
+export function Mapper(obj: object, obj2: object) {
+	getKeys(obj2).forEach((key: string) => {
+		obj[key] = obj2[key];
+	});
 }
 
 //intermediator of the dispatch
 export function MiddleDistpach(action: Action, reducer: Reducer): void {
 	//
+
+	const methods2 = Object.getOwnPropertyNames(GLOBAL_STATE.person);
+	const methodsH2 = Object.getOwnPropertyNames(
+		Object.getPrototypeOf(GLOBAL_STATE.person)
+	);
+
+	const allMethods2 = methods2.concat(methodsH2);
+
 	const newState: object = reducer(Clone(GLOBAL_STATE), action);
 
 	const changedProperties = GetChangedProperties(GLOBAL_STATE, newState);
@@ -73,19 +129,26 @@ function UpdateGlobalState(
 	newState: object,
 	modifiedProperties: string[]
 ): void {
-	if (Reflect.ownKeys(GLOBAL_STATE).length === 0) {
-		Reflect.ownKeys(newState).forEach((key: string) =>
-			Reflect.set(GLOBAL_STATE, key, newState[key])
+	if (getKeys(GLOBAL_STATE).length === 0) {
+		getKeys(newState).forEach((key: string) =>
+			setObj(GLOBAL_STATE, key, newState[key])
 		);
 	} else {
 		modifiedProperties.forEach((key: string) => {
-			Reflect.set(GLOBAL_STATE, key, newState[key]);
+			setObj(GLOBAL_STATE, key, newState[key]);
 		});
 	}
 }
 
 //returns the state with the specific properties of a subscriber
 export function ReturnStateForSubscribe(state: object, callerFunction: string) {
+	const methods = Object.getOwnPropertyNames(state.person);
+	const methodsH = Object.getOwnPropertyNames(
+		Object.getPrototypeOf(state.person)
+	);
+
+	const allMethods = methods.concat(methodsH);
+
 	const newState = {};
 
 	if (SUB_CRIBER[callerFunction]) {
@@ -94,7 +157,7 @@ export function ReturnStateForSubscribe(state: object, callerFunction: string) {
 		for (let i: number = 0; i < pros.length; i++) {
 			if (pros[i] === ALL) return state;
 
-			Reflect.set(newState, pros[i], state[pros[i]]);
+			setObj(newState, pros[i], state[pros[i]]);
 		}
 	}
 

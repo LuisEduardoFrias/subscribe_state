@@ -9,7 +9,7 @@ import Styles from "../styles/actions.module.css";
 
 const Actions = React.memo(function Actions() {
 	const [state, dispatch] = useSuperState(["person"]);
-
+	alert("---: " + JSON.stringify(state,null,2));
 	const _Styles = {
 		backgroundColor: random_color()
 	};

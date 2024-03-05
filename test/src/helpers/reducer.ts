@@ -13,6 +13,13 @@ export enum actions {
 }
 
 export default function Reducer(state: any, action: any) {
+	const methods = Object.getOwnPropertyNames(state.person);
+	const methodsH = Object.getOwnPropertyNames(
+		Object.getPrototypeOf(state.person)
+	);
+
+	const allMethods = methods.concat(methodsH);
+
 	//
 	const _action = {
 		typing: () => {

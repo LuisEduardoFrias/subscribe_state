@@ -1,5 +1,5 @@
 {
-	"name": "subscription_state",
+	"name": "super_state",
 	"version": "1.0.0",
 	"description": "SuperState es un framework de react para controlar el estado de tus aplicaciones, basado en suscripciones, te suscribes a propiedades.",
 	"main": "index.js",

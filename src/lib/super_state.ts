@@ -1,21 +1,14 @@
 /** @format */
 
-import React, { useReducer } from "react";
-
+import { useReducer } from "react";
+import { Action } from "./types";
+import { UPDATE_OBTION_ID, GLOBAL_STATE, OUT_REDUCER } from "./constants";
 import {
-	SubCribe,
-	MiddleDistpach,
-	ReturnStateForSubscribe,
-	Clone
+	subCribe,
+	middleDistpach,
+	returnStateForSubscribe,
+	clone
 } from "./functionalities";
-
-import {
-	Action,
-	Reducer,
-	UPDATE_OBTION_ID,
-	GLOBAL_STATE,
-	OutReducer
-} from "./types_constans";
 
 export default function useSuperState(
 	props: string[],
@@ -26,10 +19,10 @@ export default function useSuperState(
 	) => void
 ) {
 	//
-	function middlereducer(state: object, action: Action): object {
+	function middlereducer(state: object, action: Action) {
 		//se ejecuta cuando se requiere actializar el estado de determinado suscriptor
 		if (action.type === UPDATE_OBTION_ID) {
-			return Clone({
+			return clone({
 				GLOBAL_STATE,
 				__obtionId__: GLOBAL_STATE.__obtionId__
 					? GLOBAL_STATE.__obtionId__ === 10
@@ -40,30 +33,33 @@ export default function useSuperState(
 		}
 
 		//TODO validar si eventual mente este reducer se ejecuta.
-		alert("TODO validar si eventual mente este reducer se ejecuta.");
-		return OutReducer.fn(state, action);
+		//alert("TODO validar si eventual mente este reducer se ejecuta.");
+		//return OUT_REDUCER.fn(state, action);
+		return {}
 	}
 
 	const [state, dispatch] = useReducer(middlereducer, GLOBAL_STATE);
 
 	//Get component name
-	const callerFunction = new Error().stack?.split("\n")[2].trim().split(" ")[1];
+	const callerFunction =
+		new Error().stack?.split("\n")[2].trim().split(" ")[1] ??
+		"crypto.randomUUID";
 
 	//subscribe the component
-	SubCribe(props, callerFunction, dispatch);
+	subCribe(props, callerFunction, dispatch);
 
 	//Check if a dispatch is added to execute before the execution continues.
 	function outDispatch(action: Action) {
 		if (postDispatch) {
 			postDispatch(action, GLOBAL_STATE, (_action: Action) => {
-				MiddleDistpach(_action, OutReducer.fn);
+				middleDistpach(_action, OUT_REDUCER.fn);
 			});
 		} else {
-			MiddleDistpach(action, OutReducer.fn);
+			middleDistpach(action, OUT_REDUCER.fn);
 		}
 	}
 
-	const returnedState: object = ReturnStateForSubscribe(
+	const returnedState: object = returnStateForSubscribe(
 		GLOBAL_STATE,
 		callerFunction
 	);

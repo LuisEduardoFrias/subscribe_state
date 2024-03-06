@@ -1,18 +1,14 @@
 /** @format */
 
-import { setObj, getKeys } from "./functionalities.ts";
-
-import {
-	Reducer,
-	GLOBAL_STATE,
-	OutReducer
-} from "./types_constans";
+import { setObj, getKeys } from "./functionalities";
+import { Reducer, AnyObject } from "./types";
+import { GLOBAL_STATE, OUT_REDUCER } from "./constants";
 
 export default function initializeSuperState(
 	reducer: Reducer,
-	initalState: object
+	initalState: AnyObject
 ): void {
-	setObj(OutReducer, "fn", reducer);
+	setObj(OUT_REDUCER, "fn", reducer);
 
 	//Initialize the global state
 	if (getKeys(GLOBAL_STATE).length === 0) {

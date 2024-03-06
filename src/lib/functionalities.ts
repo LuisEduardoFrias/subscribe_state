@@ -1,16 +1,10 @@
 /** @format */
 
-import {
-	Action,
-	Reducer,
-	ALL,
-	UPDATE_OBTION_ID,
-	SUB_CRIBER,
-	GLOBAL_STATE
-} from "./types_constans";
+import { Action, OutReducer, Reducer, GlobalState, AnyObject } from "./types";
+import { UPDATE_OBTION_ID, ALL, SUB_CRIBER, GLOBAL_STATE } from "./constants";
 
 //exact comparison of two objects
-function Equal(obj1: any, obj2: any) {
+function equal(obj1: any, obj2: any) {
 	return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
 
@@ -19,16 +13,16 @@ export function setObj(obj: object, prop: string, value: any): void {
 }
 
 export function getKeys(obj: object): string[] {
-	return Reflect.ownKeys(obj);
+	return Reflect.ownKeys(obj) as string[];
 }
 
-//SubCribe the components
-export function SubCribe(
+//subCribe the components
+export function subCribe(
 	props: string[],
 	id: string,
-	dispatch: (action: Action) => object
+	dispatch: (action: Action) => void
 ): void {
-	if (!SUB_CRIBER[id]) {
+	if (typeof id === "string" && !SUB_CRIBER[id]) {
 		setObj(SUB_CRIBER, id, {
 			props,
 			wasCalled: false,
@@ -37,14 +31,14 @@ export function SubCribe(
 	}
 }
 
-//Clone object
-export function Clone(obj) {
+//clone object
+export function clone(obj: GlobalState): GlobalState {
 	const clonedObj = { ...JSON.parse(JSON.stringify(obj)) };
 	addMethods(clonedObj, obj);
 	return clonedObj;
 }
 
-function addMethods(clonedObj, originalObj) {
+function addMethods(clonedObj: GlobalState, originalObj: GlobalState) {
 	for (let prop in originalObj) {
 		if (Array.isArray(originalObj[prop])) {
 			clonedObj[prop] = originalObj[prop].slice();
@@ -75,15 +69,18 @@ function addMethods(clonedObj, originalObj) {
 	}
 }
 
-//Mapper an object
-export function Mapper(obj: object, obj2: object) {
-	getKeys(obj2).forEach((key: string) => {
-		obj[key] = obj2[key];
+//mapper an object
+export function mapper<T extends Record<string, any>>(
+	obj: T,
+	obj2: Partial<T>
+) {
+	getKeys(obj2).forEach((key: keyof T) => {
+		obj[key] = obj2[key]!;
 	});
 }
 
 //intermediator of the dispatch
-export function MiddleDistpach(action: Action, reducer: Reducer): void {
+export function middleDistpach(action: Action, reducer: Reducer): void {
 	//
 
 	const methods2 = Object.getOwnPropertyNames(GLOBAL_STATE.person);
@@ -93,11 +90,11 @@ export function MiddleDistpach(action: Action, reducer: Reducer): void {
 
 	const allMethods2 = methods2.concat(methodsH2);
 
-	const newState: object = reducer(Clone(GLOBAL_STATE), action);
+	const newState: object = reducer(clone(GLOBAL_STATE), action);
 
-	const changedProperties = GetChangedProperties(GLOBAL_STATE, newState);
+	const changedProperties = getChangedProperties(GLOBAL_STATE, newState);
 
-	UpdateGlobalState(newState, changedProperties);
+	updateGlobalState(newState, changedProperties);
 
 	changedProperties.forEach((p: string) => {
 		for (let key in SUB_CRIBER) {
@@ -116,17 +113,17 @@ export function MiddleDistpach(action: Action, reducer: Reducer): void {
 }
 
 //retorna las propiedades que an sido actializadas.
-function GetChangedProperties(oldState: object, newState: object): string[] {
+function getChangedProperties(oldState: AnyObject, newState: AnyObject): string[] {
 	const changedProperties: string[] = [];
 	for (const key in newState) {
-		if (!Equal(oldState[key], newState[key])) changedProperties.push(key);
+		if (!equal(oldState[key], newState[key])) changedProperties.push(key);
 	}
 	return changedProperties;
 }
 
 //update the global state
-function UpdateGlobalState(
-	newState: object,
+function updateGlobalState(
+	newState: AnyObject,
 	modifiedProperties: string[]
 ): void {
 	if (getKeys(GLOBAL_STATE).length === 0) {
@@ -141,14 +138,10 @@ function UpdateGlobalState(
 }
 
 //returns the state with the specific properties of a subscriber
-export function ReturnStateForSubscribe(state: object, callerFunction: string) {
-	const methods = Object.getOwnPropertyNames(state.person);
-	const methodsH = Object.getOwnPropertyNames(
-		Object.getPrototypeOf(state.person)
-	);
-
-	const allMethods = methods.concat(methodsH);
-
+export function returnStateForSubscribe(
+	state: AnyObject,
+	callerFunction: string
+) {
 	const newState = {};
 
 	if (SUB_CRIBER[callerFunction]) {

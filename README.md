@@ -1,4 +1,4 @@
-# SuperState
+# subscription_state
 
 SuperState es un paquete creado para manejar el estado global de una aplicación de React.
 Ofrece un método de suscripción a las propiedades del estado, así como dos métodos esenciales para su funcionalidad.

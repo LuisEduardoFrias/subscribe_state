@@ -11,7 +11,7 @@ export default function initializeSuperState(
 	setObj(OUT_REDUCER, "fn", reducer);
 
 	//Initialize the global state
-	if (getKeys(GLOBAL_STATE).length === 0) {
+	if (getKeys(GLOBAL_STATE).length === 1) {
 		getKeys(initalState).forEach((e: string) =>
 			setObj(GLOBAL_STATE, e, initalState[e])
 		);

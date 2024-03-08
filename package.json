@@ -1,6 +1,6 @@
 {
 	"name": "@luiseduardofrias27/super_state",
-	"version": "1.0.3",
+	"version": "1.0.5",
 	"description": "SuperState es un framework de react para controlar el estado de tus aplicaciones, basado en suscripciones, te suscribes a propiedades.",
 	"main": "dist/index.js",
 	"directories": {
@@ -23,11 +23,11 @@
 		"url": "https://github.com/LuisEduardoFrias/super_state/issues"
 	},
 	"homepage": "https://github.com/LuisEduardoFrias/super_state#readme",
-	"devDependencies": {
-		"typescript": "^5.2.2"
-	},
 	"dependencies": {
-		"@types/react": "^18.2.63",
 		"react": "^18.2.0"
+	},
+	"devDependencies": {
+		"typescript": "^5.2.2",
+		"@types/react": "^18.2.63"
 	}
 }

@@ -1,8 +1,8 @@
 /** @format */
 
 import { useReducer } from "react";
-import { Action } from "./types";
-import { UPDATE_OBTION_ID, GLOBAL_STATE, OUT_REDUCER } from "./constants";
+import { Action, GlobalState } from "./types";
+import { GLOBAL_STATE, OUT_REDUCER } from "./constants";
 import {
 	subCribe,
 	middleDistpach,
@@ -18,35 +18,32 @@ export default function useSuperState(
 		dispatch: (action: Action) => void
 	) => void
 ) {
-	//
-	function middlereducer(state: object, action: Action) {
-		//se ejecuta cuando se requiere actializar el estado de determinado suscriptor
-		if (action.type === UPDATE_OBTION_ID) {
-			return clone({
-				GLOBAL_STATE,
-				__obtionId__: GLOBAL_STATE.__obtionId__
-					? GLOBAL_STATE.__obtionId__ === 10
-						? 0
-						: GLOBAL_STATE.__obtionId__ + 1
-					: 0
-			});
-		}
+	//Solo hace que el useReducer renderize el componente
+	function reducer(state: object, action: Action) {
+		const otherState: GlobalState = clone(GLOBAL_STATE);
 
-		//TODO validar si eventual mente este reducer se ejecuta.
-		//alert("TODO validar si eventual mente este reducer se ejecuta.");
-		//return OUT_REDUCER.fn(state, action);
-		return {}
+		otherState.__obtionId__ = getRandomValue(GLOBAL_STATE.__obtionId__);
+
+		return otherState;
 	}
 
-	const [state, dispatch] = useReducer(middlereducer, GLOBAL_STATE);
+	function getRandomValue(x: number) {
+		let num;
+		do {
+			num = Math.floor(Math.random() * 1001);
+		} while (num === x);
+		return num;
+	}
 
-	//Get component name
-	const callerFunction =
+	const [state, dispatch] = useReducer(reducer, GLOBAL_STATE);
+
+	//Get component name/ don't touch it!
+	const callerFunction: string =
 		new Error().stack?.split("\n")[2].trim().split(" ")[1] ??
 		"crypto.randomUUID";
 
 	//subscribe the component
-	subCribe(props, callerFunction, dispatch);
+	subCribe(props, callerFunction, (action: Action) => dispatch(action));
 
 	//Check if a dispatch is added to execute before the execution continues.
 	function outDispatch(action: Action) {

@@ -1,10 +1,18 @@
 /** @format */
 
-import { Action, OutReducer, Reducer, GlobalState, AnyObject } from "./types";
-import { UPDATE_OBTION_ID, ALL, SUB_CRIBER, GLOBAL_STATE } from "./constants";
+import {
+	Action,
+	OutReducer,
+	Reducer,
+	GlobalState,
+	AnyObject,
+	Dispatch,
+	SubCriber
+} from "./types";
+import { ALL, SUB_CRIBER, GLOBAL_STATE } from "./constants";
 
 //exact comparison of two objects
-function equal(obj1: any, obj2: any) {
+function equal(obj1: GlobalState, obj2: GlobalState) {
 	return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
 
@@ -17,17 +25,25 @@ export function getKeys(obj: object): string[] {
 }
 
 //subCribe the components
+
 export function subCribe(
 	props: string[],
 	id: string,
-	dispatch: (action: Action) => void
+	dispatch: Dispatch
 ): void {
-	if (typeof id === "string" && !SUB_CRIBER[id]) {
+	if (!SUB_CRIBER[id]) {
+		/*
 		setObj(SUB_CRIBER, id, {
 			props,
 			wasCalled: false,
-			disp: dispatch
+			dispatch
 		});
+		*/
+		SUB_CRIBER[id] = {
+			props,
+			wasCalled: false,
+			dispatch
+		};
 	}
 }
 
@@ -83,14 +99,7 @@ export function mapper<T extends Record<string, any>>(
 export function middleDistpach(action: Action, reducer: Reducer): void {
 	//
 
-	const methods2 = Object.getOwnPropertyNames(GLOBAL_STATE.person);
-	const methodsH2 = Object.getOwnPropertyNames(
-		Object.getPrototypeOf(GLOBAL_STATE.person)
-	);
-
-	const allMethods2 = methods2.concat(methodsH2);
-
-	const newState: object = reducer(clone(GLOBAL_STATE), action);
+	const newState: GlobalState = reducer(clone(GLOBAL_STATE), action);
 
 	const changedProperties = getChangedProperties(GLOBAL_STATE, newState);
 
@@ -100,8 +109,8 @@ export function middleDistpach(action: Action, reducer: Reducer): void {
 		for (let key in SUB_CRIBER) {
 			SUB_CRIBER[key].props.forEach((pr: string) => {
 				if ((p === pr || pr === ALL) && SUB_CRIBER[key].wasCalled === false) {
-					SUB_CRIBER[key].disp({ type: UPDATE_OBTION_ID });
 					SUB_CRIBER[key].wasCalled = true;
+					SUB_CRIBER[key].dispatch({ type: "any" });
 				}
 			});
 		}
@@ -113,10 +122,15 @@ export function middleDistpach(action: Action, reducer: Reducer): void {
 }
 
 //retorna las propiedades que an sido actializadas.
-function getChangedProperties(oldState: AnyObject, newState: AnyObject): string[] {
+function getChangedProperties(
+	oldState: GlobalState,
+	newState: GlobalState
+): string[] {
 	const changedProperties: string[] = [];
 	for (const key in newState) {
-		if (!equal(oldState[key], newState[key])) changedProperties.push(key);
+		if (!equal(oldState[key], newState[key])) {
+			changedProperties.push(key);
+		}
 	}
 	return changedProperties;
 }

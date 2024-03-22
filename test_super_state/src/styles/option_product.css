@@ -1,0 +1,63 @@
+/** @format */
+
+.option-product-container {
+	width: 100%;
+	font-size: 12px;
+	padding-block-start: 5px;
+	padding-inline: 5px;
+	
+	:hover {
+		background-color: #7b8ee1;
+	}
+
+	:active {
+		background-color: #0825a2;
+	}
+
+	a {
+		height: 25px;
+		padding-inline: 3px;
+
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: repert(1fr 3);
+		grid-template-areas: "desc amount delete";
+
+		> span {
+			height: 14px;
+			align-self: center;
+		}
+
+		> span:first-child {
+			grid-area: desc;
+			width: 100px;
+
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+
+		> span:nth-child(2) {
+			grid-area: amount;
+			width: 60px;
+		}
+
+		button {
+			grid-area: delete;
+			align-self: center;
+			border: 1px solid #c2c5cc;
+			border-radius: 3px;
+			height: 18px;
+		}
+
+		button:active {
+			transform: scale(0.8);
+		}
+
+		button:hover {
+			border: 1px solid #ff7676;
+			background-color: red;
+			border-radius: 3px;
+		}
+	}
+}

@@ -1,0 +1,21 @@
+/** @format */
+
+.show-products-container {
+	position: relative;
+
+	height: 303px;
+	overflow: scroll;
+	padding: 18px;
+	border: 1px solid blue;
+	border-radius: 5px;
+	box-shadow: inset 0 0 5px 1px #00005d;
+
+	ul {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		align-content: flex-start;
+		flex-wrap: wrap;
+		gap: 15px;
+	}
+}

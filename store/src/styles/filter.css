@@ -1,0 +1,74 @@
+/** @format */
+
+.filter-container {
+	width: 100%;
+	height: 100%;
+	padding: 10px;
+	border: 1px solid blue;
+	box-shadow: inset 0 0 5px 1px #00005d;
+	border-radius: 0 0 5px 5px;
+	
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+
+	form {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: flex-start;
+		gap: 5px;
+
+		div:last-child {
+			display: flex;
+		}
+
+		div,
+		div {
+			width: 100%;
+			margin-inline-end: 10px;
+			display: flex;
+			justify-content: flex-start;
+			align-items: space-between;
+
+			label {
+				font-size: 12px;
+			}
+
+			input,
+			select {
+				margin-inline-start: 5px;
+			}
+
+			label {
+				input {
+					width: 200px;
+					margin-inline-end: 10px;
+				}
+			}
+
+			label {
+				select {
+					width: 100px;
+				}
+			}
+
+			label:last-child {
+				input {
+					width: 100px;
+				}
+				input:not(:valid) {
+					outline: none;
+					border: 2px solid red;
+				}
+			}
+
+			button {
+				padding: 2px;
+				font-size: 12px;
+			}
+		}
+	}
+}

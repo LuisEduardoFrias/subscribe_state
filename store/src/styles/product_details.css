@@ -1,0 +1,132 @@
+/** @format */
+
+.product-details-container {
+	height: 370px;
+
+	display: grid;
+	grid-template-rows: 60px 1fr;
+	grid-template-columns: 250px 1fr;
+	grid-template-areas: "title title" "contentImg contentDesc";
+	grid-gap: 5px;
+
+	.title {
+		grid-area: title;
+		height: 100%;
+		width: 100%;
+		padding: 5px;
+		border: 1px solid #909090;
+		background-color: #d0d0d0;
+		border-radius: 0 0 5px 0;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		button {
+			position: absolute;
+			top: Calc(60px / 2 - 35 / 2);
+			z-index: 9;
+
+			width: 35px;
+			height: 35px;
+
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			border: 1px solid black;
+			border-radius: 3px;
+			background-color: transparent;
+
+			:active {
+				transform: translateY(-50%) scale(0.7);
+			}
+
+			span {
+				font-size: 24px;
+			}
+		}
+
+		button:nth-child(1) {
+			left: 10px;
+
+			span {
+				transform: rotateZ(180deg) rotateX(180deg);
+			}
+		}
+
+		button:last-child {
+			right: 10px;
+
+			span {
+				transform: rotateZ(35deg) translateX(5px);
+			}
+		}
+
+		h1 {
+			z-index: 1;
+			width: Calc(100% - 90px);
+			font-size: 22px;
+			text-align: center;
+		}
+	}
+
+	.div-x {
+		position: absolute;
+		z-index: 1;
+		grid-area: contentImg;
+		width: 100%;
+		height: 100%;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		img {
+			width: 200px;
+			height: 230px;
+		}
+	}
+
+	& > div:last-child {
+		position: absolute;
+		z-index: 9;
+		border: 1px solid blue;
+		box-shadow: inset 0 0 5px 1px #00005d;
+		/*	
+		background-color: #000000cd;
+		color: white;
+		box-shadow: -2px 2px 5px 1px black;
+		border: 1px solid #a7a5a5cd;
+		*/
+		border-radius: 0 5px 5px 0;
+		grid-area: contentDesc;
+		width: 100%;
+		height: 100%;
+		padding: 10px;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 20px;
+
+		span,
+		p {
+			font-size: 18px;
+			width: 100%;
+			text-align: start;
+			text-transform: capitalize;
+		}
+
+		div {
+			overflow: scroll;
+			height: 130px;
+		}
+
+		div:last-child {
+			height: auto;
+		}
+	}
+}

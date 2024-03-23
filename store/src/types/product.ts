@@ -1,6 +1,6 @@
 /** @format */
 
-import {Rating} from "./rating.ts";
+import {Rating} from "./rating";
 
 export type Product = {
 	id: number;

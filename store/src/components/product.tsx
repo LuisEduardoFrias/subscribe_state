@@ -1,5 +1,5 @@
 /** @format */
-import useSuperState from "../super_state/lib/super_state.ts";
+import useSuperState from "../super_state/lib/super_state";
 import { actions } from "../helpers/reducer";
 import { Product } from "../types/product";
 import Rating from "./rating";

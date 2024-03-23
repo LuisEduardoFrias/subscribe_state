@@ -1,6 +1,6 @@
 /** @format */
 
-import useSuperState from "../super_state/lib/super_state.ts";
+import { dispatch } from "../super_state/lib/super_state.ts";
 
 import { actions } from "../helpers/reducer";
 import { Product } from "../types/product.ts";
@@ -14,14 +14,12 @@ export default function BasketDetailsProduct({
 	product: Product;
 	amount: number;
 }) {
-	const [_, dispatch] = useSuperState([]);
-
 	function handleRemove(id: number) {
 		dispatch({ type: actions.remove, id });
 	}
-	
-	function handleUpdateStore(value: number) {
-		dispatch({ type: actions.add_store, product, amount });
+
+	function handleUpdateStore(newAmount: number) {
+		dispatch({ type: actions.add_store, product, amount: newAmount - amount });
 	}
 
 	return (

@@ -1,0 +1,8 @@
+/** @format */
+
+.animation {
+	opacity: 1;
+	transform: scale(0);
+	transition: opacity 1s ease;
+	transition: transform 1s ease;
+}

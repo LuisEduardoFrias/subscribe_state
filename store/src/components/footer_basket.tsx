@@ -1,9 +1,10 @@
 /** @format */
 
+import { memo } from "react";
 import useSuperState from "../super_state/lib/super_state.ts";
 import "../styles/footer_basket.css";
 
-export default function FooderBasket() {
+const FooderBasket = memo(function FooderBasket() {
 	const [{ store }, dispatch] = useSuperState(["store"]);
 
 	const amount: number = store.reduce(
@@ -17,4 +18,6 @@ export default function FooderBasket() {
 			<button className='btn'>Buy</button>
 		</div>
 	);
-}
+});
+
+export default FooderBasket;

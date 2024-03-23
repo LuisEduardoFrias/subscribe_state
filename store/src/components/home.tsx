@@ -1,8 +1,8 @@
 /** @format */
 
-import React from "react";
 import useSuperState from "../super_state/lib/super_state.ts";
 
+import Animation from "./animation";
 import Filter from "./filter";
 import BasketDetails from "./basket_details";
 import Basket from "./basket";
@@ -10,6 +10,7 @@ import HeaderBasket from "./header_basket";
 import FooterBasket from "./footer_basket";
 import ProductDetails from "./product_details";
 import ShowProducts from "./show_products";
+
 import Styles from "../styles/home.module.css";
 
 export default function Home() {
@@ -42,13 +43,13 @@ export default function Home() {
 						) : (
 							<>
 								{state.showProduct ? (
-									<div>
+									<Animation key={"ProductDetails"}>
 										<ProductDetails />
-									</div>
+									</Animation>
 								) : (
-									<div>
+									<Animation key={"ShowProducts"}>
 										<ShowProducts />
-									</div>
+									</Animation>
 								)}
 							</>
 						)}

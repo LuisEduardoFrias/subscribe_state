@@ -1,5 +1,6 @@
 /** @format */
 
+import { memo } from "react";
 import useSuperState from "../super_state/lib/super_state.ts";
 import BasketDetailsProduct from "./basket_details_product.tsx";
 import Icon from "./icon";
@@ -8,7 +9,7 @@ import { productSummary } from "../types/product_summary";
 import { Product } from "../types/product";
 import "../styles/basket_details.css";
 
-export default function BasketDetails() {
+const BasketDetails = memo(function BasketDetails() {
 	const [{ store }, dispatch] = useSuperState(["store"]);
 
 	function handleBack() {
@@ -32,4 +33,6 @@ export default function BasketDetails() {
 			))}
 		</div>
 	);
-}
+});
+
+export default BasketDetails;

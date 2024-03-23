@@ -1,12 +1,11 @@
 /** @format */
 
-import useSuperState from "../super_state/lib/super_state.ts";
+import { memo } from "react";
+import { dispatch } from "../super_state/lib/super_state.ts";
 import { actions } from "../helpers/reducer";
 import "../styles/header_basket.css";
 
-export default function HeaderBasket() {
-	const [state, dispatch] = useSuperState([]);
-
+const HeaderBasket = memo(function HeaderBasket() {
 	function handleShowAll() {
 		dispatch({ type: actions.show_basket_details, value: true });
 	}
@@ -21,4 +20,6 @@ export default function HeaderBasket() {
 			</a>
 		</div>
 	);
-}
+});
+
+export default HeaderBasket;

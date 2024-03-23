@@ -32,10 +32,16 @@ export default function Reducer(
 
 			if (index !== -1) {
 				const amount = store[index].amount;
-				store[index] = {
-					product: action.product,
-					amount: amount + action.amount
-				};
+				const newAmount: number = amount + action.amount;
+				if (newAmount >= 1) {
+					store[index] = {
+						product: action.product,
+						amount: newAmount
+					};
+				} else if (newAmount <= 0) {
+					
+					return { ...state, store: [...store.splice(index, 1)] };
+				}
 			} else {
 				store.push({ product: action.product, amount: action.amount });
 			}

@@ -1,8 +1,9 @@
 /** @format */
+import { memo } from "react";
 import "../styles/filter.css";
 import categories from "../helpers/all_categories.json";
 
-export default function Filter() {
+const Filter = memo(function Filter() {
 	function handleSubmit() {}
 
 	return (
@@ -45,4 +46,6 @@ export default function Filter() {
 			</form>
 		</div>
 	);
-}
+});
+
+export default Filter;

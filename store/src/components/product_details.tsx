@@ -1,5 +1,6 @@
 /** @format */
 
+import { memo } from "react";
 import { useState } from "react";
 //import { Product } from "../types/product";
 import AmountControl from "./amount_control";
@@ -10,8 +11,9 @@ import "../styles/product_details.css";
 import Rating from "./rating";
 import products from "../helpers/limit_products_success_results.json";
 
-export default function ProductDetails() {
+const ProductDetails = memo(function ProductDetails() {
 	const [{ showProduct }, dispatch] = useSuperState(["showProduct"]);
+
 	const [amount, setAmount] = useState(1);
 
 	function handleBack() {
@@ -63,4 +65,6 @@ export default function ProductDetails() {
 			</div>
 		</article>
 	);
-}
+});
+
+export default ProductDetails;

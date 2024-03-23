@@ -22,53 +22,56 @@ export default function useSuperState(
 		dispatch: (action: Action) => void
 	) => void
 ): [] {
+	const initialized: Initialize = useInitialize();
+	//Solo hace que el useReducer renderize el componente
+	function reducer(state: ObjReducer, action: Action): any {
+		let num;
 
-		const initialized: Initialize = useInitialize();
-		//Solo hace que el useReducer renderize el componente
-		function reducer(state: ObjReducer, action: Action): any {
-			let num;
+		do {
+			num = Math.floor(Math.random() * 1001);
+		} while (num === state.value);
 
-			do {
-				num = Math.floor(Math.random() * 1001);
-			} while (num === state.value);
+		return { value: num };
+	}
 
-			return { value: num };
+	const [state, dispatch] = useReducer(reducer, { value: 0 });
+
+	//Get component name/ don't touch it!
+	const callerFunction: string =
+		new Error().stack?.split("\n")[2].trim().split(" ")[1] ??
+		"crypto.randomUUID";
+
+	function callDispatch(action: Action) {
+		dispatch(action);
+	}
+
+	//subscribe the component
+	subCribe(props, callerFunction, callDispatch);
+
+	//Check if a dispatch is added to execute before the execution continues.
+	function outDispatch(action: Action) {
+		if (postDispatch) {
+			postDispatch(
+				action,
+				initialized.clone().globalState,
+				(_action: Action) => {
+					middleDistpach(_action, initialized.reducer);
+				}
+			);
+		} else {
+			middleDistpach(action, initialized.reducer);
 		}
+	}
 
-		const [state, dispatch] = useReducer(reducer, { value: 0 });
+	const returnedState: object = returnStateForSubscribe(
+		initialized.clone().globalState,
+		callerFunction
+	);
 
-		//Get component name/ don't touch it!
-		const callerFunction: string =
-			new Error().stack?.split("\n")[2].trim().split(" ")[1] ??
-			"crypto.randomUUID";
+	return [returnedState, outDispatch];
+}
 
-		function callDispatch(action: Action) {
-			dispatch(action);
-		}
-
-		//subscribe the component
-		subCribe(props, callerFunction, callDispatch);
-
-		//Check if a dispatch is added to execute before the execution continues.
-		function outDispatch(action: Action) {
-			if (postDispatch) {
-				postDispatch(
-					action,
-					initialized.clone().globalState,
-					(_action: Action) => {
-						middleDistpach(_action, initialized.reducer);
-					}
-				);
-			} else {
-				middleDistpach(action, initialized.reducer);
-			}
-		}
-
-		const returnedState: object = returnStateForSubscribe(
-			initialized.clone().globalState,
-			callerFunction
-		);
-
-		return [returnedState, outDispatch];
-
+export function dispatch(action: Action) {
+	const initialized: Initialize = useInitialize();
+	middleDistpach(action, initialized.reducer);
 }

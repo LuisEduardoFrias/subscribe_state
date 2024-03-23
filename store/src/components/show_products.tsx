@@ -1,11 +1,12 @@
 /** @format */
 
+import { memo } from "react";
 import { Product as Pd } from "../types/product";
 import Product from "./product";
 import "../styles/show_product.css";
 import products from "../helpers/limit_products_success_results.json";
 
-export default function ShowProducts() {
+const ShowProducts = memo(function ShowProducts() {
 	return (
 		<article className='show-products-container'>
 			<ul>
@@ -15,4 +16,6 @@ export default function ShowProducts() {
 			</ul>
 		</article>
 	);
-}
+});
+
+export default ShowProducts;

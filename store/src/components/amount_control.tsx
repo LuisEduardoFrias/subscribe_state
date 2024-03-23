@@ -1,4 +1,5 @@
 /** @format */
+
 export default function AmountControl({
 	amount,
 	setAmount

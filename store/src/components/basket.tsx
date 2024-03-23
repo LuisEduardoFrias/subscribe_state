@@ -1,26 +1,27 @@
 /** @format */
 
 import useSuperState from "../super_state/lib/super_state.ts";
-import generateProductSummaryAdapter, {
+/*import generateProductSummaryAdapter, {
 	productSummary
-} from "../adacters/generate_product_summary_adapter";
-import { Product } from "../types/product";
+} from "../adacters/generate_product_summary_adapter";*/
+
+import { Product, ProductSummary } from "../types/product";
 import OptionProduct from "./option_product";
 import "../styles/basket.css";
 
 export default function Basket() {
-	const [state, dispatch] = useSuperState(["store"]);
+	const [{ store }, dispatch] = useSuperState(["store"]);
 
-	let products: productSummary[] = generateProductSummaryAdapter(state.store);
+	//let products: productSummary[] = generateProductSummaryAdapter(store);
 
 	return (
 		<div className='basket-container'>
 			<ul>
-				{products.map((obj: productSummary, index: number) => (
+				{store.map((obj: ProductSummary, index: number) => (
 					<OptionProduct
 						key={obj.product.id}
 						product={obj.product}
-						count={obj.count}
+						amount={obj.amount}
 						index={index}
 					/>
 				))}

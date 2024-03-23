@@ -1,5 +1,7 @@
 /** @format */
 
+import { ProductSummary } from "../types/product_summary";
+
 import { Action, GlobalState } from "../../../src/types/index";
 
 export enum actions {
@@ -18,19 +20,36 @@ export default function Reducer(
 		detailts: () => {
 			const newState: any = { ...state };
 			newState.showProduct = action.value;
+			newState.showBasketDetails = false;
 			return newState;
 		},
 		add_store: () => {
 			const store: any = [...state.store];
-			store.push(action.value);
+
+			const index = store.findIndex(
+				(obj: ProductSummary) => obj.product.id === action.product.id
+			);
+
+			if (index !== -1) {
+				const amount = store[index].amount;
+				store[index] = {
+					product: action.product,
+					amount: amount + action.amount
+				};
+			} else {
+				store.push({ product: action.product, amount: action.amount });
+			}
+
 			return { ...state, store };
 		},
 		remove: () => {
+			const store: any = [...state.store];
 			const newState: any = { ...state };
-			const store: any = newState.store;
 
 			newState.store = [
-				...store.filter((e: Product, i: number) => e.id !== action.value)
+				...store.filter(
+					(obj: ProductSummary, i: number) => obj.product.id !== action.id
+				)
 			];
 
 			return newState;

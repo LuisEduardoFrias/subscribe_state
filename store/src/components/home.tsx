@@ -21,7 +21,11 @@ export default function Home() {
 			<header>header</header>
 			<main>
 				<section
-					className={state.showProduct ? Styles.detail : Styles.products}>
+					className={
+						state.showBasketDetails || state.showProduct
+							? Styles.detail
+							: Styles.products
+					}>
 					{!state.showBasketDetails && (
 						<>
 							{!state.showProduct && (

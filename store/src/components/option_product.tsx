@@ -8,16 +8,16 @@ import "../styles/option_product.css";
 export default function OptionProduct({
 	product,
 	index,
-	count
+	amount
 }: {
 	product: Product;
 	index: number;
-	count: number;
+	amount: number;
 }) {
 	const [_, dispatch] = useSuperState([]);
 
 	function handleRemove() {
-		dispatch({ type: actions.remove, value: product.id, index });
+		dispatch({ type: actions.remove, id: product.id });
 	}
 
 	function handleAddDetail(evet: HTMLAElement) {
@@ -28,7 +28,7 @@ export default function OptionProduct({
 		<li className='option-product-container'>
 			<a onClick={handleAddDetail}>
 				<span>{product.title}</span>
-				<span>{`${count} x $${product.price}`}</span>
+				<span>{`${amount} x $${product.price}`}</span>
 			</a>
 			<button onClick={handleRemove}>🗑️</button>
 		</li>

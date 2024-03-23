@@ -1,6 +1,5 @@
 /** @format */
 
-import Icon from "./icon";
 import useSuperState from "../super_state/lib/super_state.ts";
 import { actions } from "../helpers/reducer";
 import "../styles/header_basket.css";
@@ -17,8 +16,7 @@ export default function HeaderBasket() {
 			<span>🛒 Basket</span>
 			<a>
 				<button className='btn' onClick={handleShowAll}>
-					
-					<Icon>seach</Icon>
+					🔎 show all
 				</button>
 			</a>
 		</div>

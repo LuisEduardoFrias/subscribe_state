@@ -16,7 +16,7 @@ export default function generateProductSummaryAdapter(
 			if (existingProduct) {
 				existingProduct.count++;
 			} else {
-				summary.push({ product, count: 1 });
+				summary.push({ product, amount: 1 });
 			}
 			return summary;
 		}, []);

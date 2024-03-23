@@ -5,8 +5,9 @@ import "../styles/option_product.css";
 
 export default function OptionProduct({ product }: { product: Product }) {
 	return (
-			<li className='option-product-container'>
-		<a>
+		<li className='option-product-container'>
+			<a>
+				<span>{product.title}</span>
 				<span>{product.title}</span>
 				<span>{`$${product.price}`}</span>
 				<button>🗑️</button>

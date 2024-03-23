@@ -1,0 +1,37 @@
+
+.container-backet-details-product {
+	height: 130px;
+		padding: 10px;
+		margin: 5px;
+		border: 1px solid #737373;
+		border-radius: 3px;
+		box-shadow: 0 1px 5px 0 black;
+
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 10px;
+
+		& > div {
+			width: 100%;
+			border: 0px solid green;
+			height: 100%;
+			padding: 5px;
+
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+
+			& > div {
+				padding-inline: 10px;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+
+				> button {
+					width: 35px;
+				}
+			}
+		}
+	}
+	

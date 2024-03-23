@@ -1,48 +1,35 @@
 /** @format */
 
 import useSuperState from "../super_state/lib/super_state.ts";
+import BasketDetailsProduct from "./basket_details_product.tsx";
+import Icon from "./icon";
 import { actions } from "../helpers/reducer";
-import generateProductSummaryAdapter, {
-	productSummary
-} from "../adacters/generate_product_summary_adapter";
+import { productSummary } from "../types/product_summary";
 import { Product } from "../types/product";
 import "../styles/basket_details.css";
 
 export default function BasketDetails() {
-	const [state, dispatch] = useSuperState(["store"]);
-
-	const products: productSummary[] = generateProductSummaryAdapter(state.store);
+	const [{ store }, dispatch] = useSuperState(["store"]);
 
 	function handleBack() {
 		dispatch({ type: actions.show_basket_details, value: false });
 	}
 
 	return (
-		<div>
+		<div className='container-backet-details'>
 			<button className='btn' onClick={handleBack}>
-				<span>➥</span>
+				<Icon>arrow_back</Icon>
 			</button>
 
-			{products.length === 0 && <span>No hey producto</span>}
-			{products.map((sp: productSummary) => (
-				<div>
-					<span>{sp.product.title}</span>
-					<img
-						loading='lazy'
-						src={sp.product.image}
-						width='100'
-						height='100'
-						alt={sp.product.title}
-					/>
-					<button>-</button>
-					<span>{sp.count}</span>
-					<button>+</button>
-					
-						<button>🗑️</button>
-				</div>
-			))}
+			{store.length === 0 && <span>No hey producto</span>}
 
-			<h1>cosas</h1>
+			{store.map((sp: productSummary) => (
+				<BasketDetailsProduct
+					key={sp.product.id}
+					product={sp.product}
+					amount={sp.amount}
+				/>
+			))}
 		</div>
 	);
 }

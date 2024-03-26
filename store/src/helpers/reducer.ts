@@ -2,74 +2,108 @@
 
 import { ProductSummary } from "../types/product_summary";
 
-import { Action, GlobalState } from "../../../src/types/index";
+import { Store } from "../types/store.d";
+import { Action } from "../../../src/types/index";
 
 export enum actions {
-	detailts = "detailts",
-	add_store = "add_store",
-	remove = "remove",
-	show_basket_details = "show_basket_details"
+    add_product = "add_product",
+    detailts = "detailts",
+    add_store = "add_store",
+    remove = "remove",
+    show_basket_details = "show_basket_details",
+    markUnmarkPayment = "markUnmarkPayment",
+    buy = "buy"
 }
 
-export default function Reducer(
-	state: GlobalState,
-	action: Action
-): GlobalState {
-	//
-	const _action = {
-		detailts: () => {
-			const newState: any = { ...state };
-			newState.showProduct = action.value;
-			newState.showBasketDetails = false;
-			return newState;
-		},
-		add_store: () => {
-			const store: any = [...state.store];
+export default function Reducer(state: Store, action: Action): Store {
+    //
+    const _action = {
+        add_product: () => {
+            console.log(
+                "productos all: " + JSON.stringify(action.products, null, 2)
+            );
+            return { ...state, products: action.products };
+        },
+        detailts: () => {
+            const newState: any = { ...state };
+            newState.showProduct = action.value;
+            newState.showBasketDetails = false;
+            return newState;
+        },
+        markUnmarkPayment: () => {
+            const store: any = [...state.store];
+            return {
+                ...state,
+                store: [
+                    ...store.map((obj: ProductSummary) => {
+                        if (obj.product.id === action.id) {
+                            const newObj = { ...obj };
+                            newObj.pay = action.isChecked;
+                            return newObj;
+                        }
 
-			const index = store.findIndex(
-				(obj: ProductSummary) => obj.product.id === action.product.id
-			);
+                        return obj;
+                    })
+                ]
+            };
+        },
+        add_store: () => {
+            const store: any = [...state.store];
 
-			if (index !== -1) {
-				const amount = store[index].amount;
-				const newAmount: number = amount + action.amount;
-				if (newAmount >= 1) {
-					store[index] = {
-						product: action.product,
-						amount: newAmount
-					};
-				} else if (newAmount <= 0) {
-					
-					return { ...state, store: [...store.splice(index, 1)] };
-				}
-			} else {
-				store.push({ product: action.product, amount: action.amount });
-			}
+            const index = store.findIndex(
+                (obj: ProductSummary) => obj.product.id === action.product.id
+            );
 
-			return { ...state, store };
-		},
-		remove: () => {
-			const store: any = [...state.store];
-			const newState: any = { ...state };
+            if (index !== -1) {
+                const amount = store[index].amount;
+                const newAmount: number = amount + action.amount;
 
-			newState.store = [
-				...store.filter(
-					(obj: ProductSummary, i: number) => obj.product.id !== action.id
-				)
-			];
+                if (newAmount >= 1) {
+                    store[index] = {
+                        product: action.product,
+                        pay: true,
+                        amount: newAmount
+                    };
+                } else if (newAmount <= 0) {
+                    return { ...state, store: [...store.splice(index, 1)] };
+                }
+            } else {
+                store.push({
+                    product: action.product,
+                    amount: action.amount,
+                    pay: true
+                });
+            }
 
-			return newState;
-		},
-		show_basket_details: () => {
-			const newState: any = { ...state };
-			newState.showBasketDetails = action.value;
-			return newState;
-		},
-		default: () => {
-			console.log(`El type: ${action.type} no existe`);
-			return undefined;
-		}
-	};
+            return { ...state, store };
+        },
+        buy: () => {
+            const store: any = [...state.store];
 
-	return (_action[action.type] ?? _action["default"])();
+            return { ...state };
+        },
+        remove: () => {
+            const store: any = [...state.store];
+
+            return {
+                ...state,
+                store: [
+                    ...store.filter(
+                        (obj: ProductSummary) => obj.product.id !== action.id
+                    )
+                ]
+            };
+        },
+        show_basket_details: () => {
+            const newState: any = { ...state };
+            newState.showBasketDetails = action.value;
+            return newState;
+        },
+        default: () => {
+            console.log(`El type: ${action.type} no existe`);
+            return undefined;
+        }
+    };
+
+    return (_action[action.type] ?? _action["default"])();
 }

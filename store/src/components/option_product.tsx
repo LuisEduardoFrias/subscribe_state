@@ -30,7 +30,9 @@ export default function OptionProduct({
 				<span>{product.title}</span>
 				<span>{`${amount} x $${product.price}`}</span>
 			</a>
-			<button onClick={handleRemove}>🗑️</button>
+			<button className='btn-remove' onClick={handleRemove}>
+				🗑️
+			</button>
 		</li>
 	);
 }

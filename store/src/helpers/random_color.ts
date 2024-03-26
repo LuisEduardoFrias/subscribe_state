@@ -1,26 +1,15 @@
 /** @format */
 
-let previousColor: string = "";
+let oldColor: [number, number, number];
 
 export default function RandomColor(): string {
-	const colors: string[] = [
-		"#d90000fb",
-		"#0000ff",
-		"#00ec00",
-		"#ffff00",
-		"#000000",
-		"#ffffff",
-		"#f8002b",
-		"#f86e00",
-		"#800080",
-		"#a52a2a"
-	];
+    let color: [number, number, number] = [0, 0, 0];
 
-	let randomIndex: number;
-	do {
-		randomIndex = Math.floor(Math.random() * colors.length);
-	} while (colors[randomIndex] === previousColor);
+    for (let i: number = 0; i < 3; i++) {
+        color[i] = Math.floor(Math.random() * 225);
+    }
 
-	previousColor = colors[randomIndex];
-	return colors[randomIndex];
+    oldColor = color;
+
+    return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 }

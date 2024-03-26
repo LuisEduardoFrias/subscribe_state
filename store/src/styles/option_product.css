@@ -60,9 +60,4 @@
 		transform: scale(0.8);
 	}
 
-	button:hover {
-		border: 1px solid #ff7676;
-		background-color: red;
-		border-radius: 3px;
-	}
 }

@@ -86,6 +86,7 @@
 		img {
 			width: 200px;
 			height: 230px;
+			mask-image: linear-gradient(black 90%, transparent);
 		}
 	}
 

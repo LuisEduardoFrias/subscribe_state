@@ -1,25 +1,31 @@
 /** @format */
 
 import { dispatch } from "../super_state/lib/super_state.ts";
-
 import { actions } from "../helpers/reducer";
-import { Product } from "../types/product.ts";
+import { Product } from "../types/product";
+import Check from "./check";
 import AmountControl from "./amount_control";
 import "../styles/basket_details_product.css";
 
 export default function BasketDetailsProduct({
 	product,
+	pay,
 	amount
 }: {
 	product: Product;
+	pay: boolean;
 	amount: number;
 }) {
-	function handleRemove(id: number) {
-		dispatch({ type: actions.remove, id });
+	function handleRemove() {
+		dispatch({ type: actions.remove, id: product.id });
 	}
 
 	function handleUpdateStore(newAmount: number) {
 		dispatch({ type: actions.add_store, product, amount: newAmount - amount });
+	}
+
+	function handleChecked(isChecked: boolean) {
+		dispatch({ type: actions.markUnmarkPayment, isChecked, id: product.id });
 	}
 
 	return (
@@ -31,14 +37,20 @@ export default function BasketDetailsProduct({
 				height='100'
 				alt={product.title}
 			/>
+
 			<div>
-				<span>{product.title}</span>
+				<div>
+					<span>{product.title}</span>
+					<div>
+						<Check isChecked={pay} setChecked={handleChecked} />
+					</div>
+				</div>
 				<div>
 					<AmountControl amount={amount} setAmount={handleUpdateStore} />
 					<button
-						className='btn'
+						className='btn btn-remove'
 						onClick={() => {
-							handleRemove(product.id);
+							handleRemove();
 						}}>
 						🗑️
 					</button>

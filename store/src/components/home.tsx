@@ -2,7 +2,8 @@
 
 import useSuperState from "../super_state/lib/super_state.ts";
 
-import Animation from "./animation";
+import Header from "./header";
+import Animation, { transitions } from "./animation";
 import Filter from "./filter";
 import BasketDetails from "./basket_details";
 import Basket from "./basket";
@@ -19,7 +20,7 @@ export default function Home() {
 
 	return (
 		<div className={Styles.container}>
-			<header>header</header>
+			<Header />
 			<main>
 				<section
 					className={
@@ -30,16 +31,20 @@ export default function Home() {
 					{!state.showBasketDetails && (
 						<>
 							{!state.showProduct && (
-								<div className={Styles.filter}>{<Filter />}</div>
+								<Animation key={"BasketDetails"} className={Styles.filter}>
+									{<Filter />}
+								</Animation>
 							)}
 						</>
 					)}
 
 					<div className={Styles.content}>
 						{state.showBasketDetails ? (
-							<div>
+							<Animation
+								key={"BasketDetails"}
+								transition={transitions.transform}>
 								<BasketDetails />
-							</div>
+							</Animation>
 						) : (
 							<>
 								{state.showProduct ? (

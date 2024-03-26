@@ -17,20 +17,31 @@ const BasketDetails = memo(function BasketDetails() {
 	}
 
 	return (
-		<div className='container-backet-details'>
-			<button className='btn' onClick={handleBack}>
-				<Icon>arrow_back</Icon>
-			</button>
+		<div className="container-backet-details">
+			<div>
+				<span>Basket 🛒</span>
 
-			{store.length === 0 && <span>No hey producto</span>}
+				<button className="btn" onClick={handleBack}>
+					<Icon>arrow_back</Icon>
+				</button>
+			</div>
 
-			{store.map((sp: productSummary) => (
-				<BasketDetailsProduct
-					key={sp.product.id}
-					product={sp.product}
-					amount={sp.amount}
-				/>
-			))}
+			<div>
+				{store.length === 0 && <span>No hey producto</span>}
+
+				{store.map((sp: productSummary) => (
+					<BasketDetailsProduct
+						key={sp.product.id}
+						{...sp}
+					/*product={sp.product}
+					pay={sp.pay}
+					amount={sp.amount}*/
+					/>
+				))}
+			</div>
+			<br />
+			<hr />
+
 		</div>
 	);
 });

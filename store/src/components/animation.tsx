@@ -3,17 +3,26 @@
 import { ReactElement, useEffect, useState } from "react";
 import Styles from "../styles/animation.module.css";
 
-export default function Animation({ children }: { children: ReactElement }) {
-	const [opacity, setOpacity] = useState("0");
+export const enum transitions {
+	opacity = "opacity",
+	transform = "transform"
+}
+
+export default function Animation({
+	children,
+	transition = transitions.opacity
+}: {
+	children: ReactElement;
+	transition?: transitions;
+}) {
+	const [opacity, setOpacity] = useState(0);
+	const [scale, setCale] = useState(0.7);
 	//
 	useEffect(() => {
-		const timeoutID = setTimeout(
-			() => {
-				setOpacity("1");
-			},
-			1,
-			"wake up"
-		);
+		const timeoutID = setTimeout(() => {
+			setOpacity(1);
+			setCale(1);
+		}, 1);
 
 		return () => {
 			clearTimeout(timeoutID);
@@ -21,8 +30,9 @@ export default function Animation({ children }: { children: ReactElement }) {
 	}, []);
 	//
 	const _Style = {
-		opacity,
-		transform: `scale(${opacity})`
+		opacity: `${opacity}`,
+		transform: `scale(${scale})`,
+		transition: `${transition} 1s ease`
 	};
 
 	return (

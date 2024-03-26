@@ -1,10 +1,13 @@
 /** @format */
 
-export default function initialState() {
-	return {
-		products: [],
-		store: [],
-		showProduct: undefined,
-		showBasketDetails: false
-	};
+import { Store } from "../types/store.d";
+
+export default function initialState(): Store {
+    return {
+        products: [],
+        store: [],
+        purchased: [],
+        showProduct: undefined,
+        showBasketDetails: false
+    };
 }

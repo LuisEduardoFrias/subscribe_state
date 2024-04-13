@@ -10,7 +10,7 @@ import {
 	SubCriber
 } from "./types";
 import { ALL, SUB_CRIBER } from "./constants";
-import useInitialize, { Initialize } from "./initialize_super_state";
+import { Initialize } from "./initialize_super_state";
 
 //exact comparison of two objects
 function equal(obj1: GlobalState, obj2: GlobalState) {
@@ -50,7 +50,7 @@ export function subCribe(
 export function middleDistpach(action: Action, reducer: Reducer): void {
 	//
 
-	const initialized: Initialize = useInitialize();
+	const initialized: Initialize = Initialize.getInstance();
 
 	const newState: GlobalState = reducer(
 		initialized.clone().globalState,
@@ -101,8 +101,8 @@ function getChangedProperties(
 export function returnStateForSubscribe(
 	state: GlobalState,
 	callerFunction: string
-) {
-	const newState = {};
+):GlobalState {
+	const newState : GlobalState= {};
 
 	if (SUB_CRIBER[callerFunction]) {
 		const pros: string[] = SUB_CRIBER[callerFunction].props;

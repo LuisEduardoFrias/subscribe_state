@@ -7,7 +7,7 @@ Ofrece un método de suscripción a las propiedades del estado, así como dos m�
 
 Para instalar SuperState, puedes hacerlo a través de npm:
 ```bash
-npm install super_state
+npm install @luiseduardofrias27/super_state
 ```
 
 ## Uso

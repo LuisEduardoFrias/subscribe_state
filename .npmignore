@@ -1,0 +1,6 @@
+lib/
+test/
+node_modules
+.gitignore
+index.ts
+package-lock.json

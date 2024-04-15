@@ -4,20 +4,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Initialize = void 0;
 const functionalities_1 = require("./functionalities");
-const constants_1 = require("./constants");
+// declare global {
+//     var instance: Initialize;
+// }
 function useInitialize(reducer, initialState) {
-    return Initialize.Instance(reducer, initialState);
+    Initialize.getInstance(reducer, initialState);
 }
 exports.default = useInitialize;
 class Initialize {
-    static Instance(reducer, initialState) {
-        if (!constants_1.GLOBAL.instance) {
-            if (!reducer || !initialState) {
-                throw Error(`${!reducer && "the reducer parameter is required for instance Initialize."}${!initialState && "\nthe initialState parameter is required for instance Initialize."}`);
-            }
-            constants_1.GLOBAL.instance = new Initialize(reducer, initialState);
+    static getInstance(reducer, initialState) {
+        if (!Initialize._instance) {
+            if (!reducer || !initialState)
+                throw new Error(`${!reducer ? "The reducer parameter is required for instance Initialize." : ""}${!reducer && !initialState ? "\n" : ""}${!initialState ? "The initialState parameter is required for instance Initialize." : ""}`);
+            Initialize._instance = new Initialize(reducer, initialState);
         }
-        return constants_1.GLOBAL.instance;
+        return Initialize._instance;
     }
     constructor(reducer, initialState) {
         this._reducer = reducer;

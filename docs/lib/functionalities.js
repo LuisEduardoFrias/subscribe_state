@@ -1,12 +1,9 @@
 "use strict";
 /** @format */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.returnStateForSubscribe = exports.middleDistpach = exports.subCribe = exports.getKeys = exports.setObj = void 0;
 const constants_1 = require("./constants");
-const initialize_super_state_1 = __importDefault(require("./initialize_super_state"));
+const initialize_super_state_1 = require("./initialize_super_state");
 //exact comparison of two objects
 function equal(obj1, obj2) {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
@@ -38,7 +35,7 @@ exports.subCribe = subCribe;
 //intermediator of the dispatch
 function middleDistpach(action, reducer) {
     //
-    const initialized = (0, initialize_super_state_1.default)();
+    const initialized = initialize_super_state_1.Initialize.getInstance();
     const newState = reducer(initialized.clone().globalState, action);
     const changedProperties = getChangedProperties(initialized.globalState, newState);
     initialized.updateGlobalState(newState, changedProperties);

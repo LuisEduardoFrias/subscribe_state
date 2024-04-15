@@ -49,11 +49,10 @@ export function subCribe(
 //intermediator of the dispatch
 export function middleDistpach(action: Action, reducer: Reducer): void {
 	//
-
 	const initialized: Initialize = Initialize.getInstance();
 
 	const newState: GlobalState = reducer(
-		initialized.clone().globalState,
+        initialized.globalState,
 		action
 	);
 

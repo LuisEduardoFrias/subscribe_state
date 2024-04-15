@@ -1,7 +1,7 @@
 /** @format */
 
-import useSuperState, { dispatch } from "./lib/super_state";
+import useSubscribeState, { dispatch } from "./lib/subscribe_state";
 import useInitialize from "./lib/initialize_super_state";
 
-export { useSuperState, dispatch };
+export { useSubscribeState, dispatch };
 export default useInitialize;

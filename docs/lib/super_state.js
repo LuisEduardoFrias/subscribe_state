@@ -1,16 +1,13 @@
 "use strict";
 /** @format */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dispatch = void 0;
 const react_1 = require("react");
 const functionalities_1 = require("./functionalities");
-const initialize_super_state_1 = __importDefault(require("./initialize_super_state"));
-function useSuperState(props, postDispatch) {
+const initialize_super_state_1 = require("./initialize_super_state");
+function useSuperState(props = [], postDispatch) {
     var _a, _b;
-    const initialized = (0, initialize_super_state_1.default)();
+    const initialized = initialize_super_state_1.Initialize.getInstance();
     //Solo hace que el useReducer renderize el componente
     function reducer(state, action) {
         let num;
@@ -38,12 +35,10 @@ function useSuperState(props, postDispatch) {
             (0, functionalities_1.middleDistpach)(action, initialized.reducer);
         }
     }
-    const returnedState = (0, functionalities_1.returnStateForSubscribe)(initialized.clone().globalState, callerFunction);
-    return [returnedState, outDispatch];
+    return [(0, functionalities_1.returnStateForSubscribe)(initialized.clone().globalState, callerFunction), outDispatch];
 }
 exports.default = useSuperState;
 function dispatch(action) {
-    const initialized = (0, initialize_super_state_1.default)();
-    (0, functionalities_1.middleDistpach)(action, initialized.reducer);
+    (0, functionalities_1.middleDistpach)(action, initialize_super_state_1.Initialize.getInstance().reducer);
 }
 exports.dispatch = dispatch;

@@ -6,38 +6,38 @@ import { getKeys, setObj } from "./functionalities";
 //     var instance: Initialize;
 // }
 
-export default function useInitialize<T extends object>(
-    reducer?: (state: T, action: AnyObject) => T,
-    initialState?: T
+export default function useInitialize(
+    reducer?: Reducer,
+    initialState?: GlobalState
 ): void {
-    Initialize.getInstance<T>(reducer, initialState);
+    Initialize.getInstance(reducer, initialState);
 }
 
-export class Initialize<K extends object> {
+export class Initialize {
     private _reducer: Reducer;
-    private _globalState: K;
-    private static _instance: Initialize<k>;
+    private _globalState: GlobalState;
+    private static _instance: Initialize;
 
-    public static getInstance<T extends object>(
-        reducer?: (state: T, action: AnyObject) => T,
-        initialState?: T
-    ): Initialize<k> {
+    public static getInstance(
+        reducer?: Reducer,
+        initialState?: GlobalState
+    ): Initialize {
         if (!Initialize._instance) {
             if (!reducer || !initialState)
                 throw new Error(`${!reducer ? "The reducer parameter is required for instance Initialize." : ""}${!reducer && !initialState ? "\n" : ""}${!initialState ? "The initialState parameter is required for instance Initialize." : ""}`);
 
-            Initialize._instance = new Initialize<T>(reducer, initialState);
+            Initialize._instance = new Initialize(reducer, initialState);
         }
 
         return Initialize._instance;
     }
 
-    private constructor(reducer: (state: K, action: AnyObject) => K, initialState: K) {
+    private constructor(reducer: Reducer, initialState: GlobalState) {
         this._reducer = reducer;
         this._globalState = initialState;
     }
 
-    public get globalState(): K {
+    public get globalState(): GlobalState {
         /*
         let aux = ({ name: "function name", value: this._globalState["function name"] });
         Reflect.deleteProperty(this._globalState, "function name");
@@ -49,11 +49,11 @@ export class Initialize<K extends object> {
         return structuredClone(this._globalState);
     }
 
-    public get reducer(): (state: K, action: AnyObject) => K {
+    public get reducer(): Reducer {
         return this._reducer;
     }
 
-    updateGlobalState(newState: K, modifiedProperties: string[]): void {
+    updateGlobalState(newState: GlobalState, modifiedProperties: string[]): void {
         if (getKeys(this._globalState).length === 0) {
             getKeys(newState).forEach((key: string) =>
                 setObj(this._globalState, key, newState[key])

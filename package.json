@@ -1,6 +1,6 @@
 {
     "name": "subscribe_state",
-    "version": "1.0.13",
+    "version": "1.0.1",
     "description": "subscribeState es un hook de react para controlar el estado de tus aplicaciones, basado en suscripciones, suscribiendote a las propiedades del estado.",
     "main": "docs/index.js",
     "type": "module",
@@ -36,6 +36,7 @@
     },
     "devDependencies": {
         "@testing-library/react": "^15.0.1",
+        "@types/node": "^20.12.7",
         "@types/react": "^18.2.63",
         "@vitejs/plugin-react": "^4.2.1",
         "@vitest/coverage-v8": "^1.5.0",

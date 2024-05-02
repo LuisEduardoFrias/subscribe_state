@@ -27,9 +27,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dispatch = exports.useSuperState = void 0;
-const super_state_1 = __importStar(require("./lib/super_state"));
-exports.useSuperState = super_state_1.default;
-Object.defineProperty(exports, "dispatch", { enumerable: true, get: function () { return super_state_1.dispatch; } });
+exports.dispatch = exports.useSubscribeState = void 0;
+const subscribe_state_1 = __importStar(require("./lib/subscribe_state"));
+exports.useSubscribeState = subscribe_state_1.default;
+Object.defineProperty(exports, "dispatch", { enumerable: true, get: function () { return subscribe_state_1.dispatch; } });
 const initialize_super_state_1 = __importDefault(require("./lib/initialize_super_state"));
 exports.default = initialize_super_state_1.default;

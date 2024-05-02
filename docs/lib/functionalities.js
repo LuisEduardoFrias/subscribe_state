@@ -36,7 +36,7 @@ exports.subCribe = subCribe;
 function middleDistpach(action, reducer) {
     //
     const initialized = initialize_super_state_1.Initialize.getInstance();
-    const newState = reducer(initialized.clone().globalState, action);
+    const newState = reducer(initialized.globalState, action);
     const changedProperties = getChangedProperties(initialized.globalState, newState);
     initialized.updateGlobalState(newState, changedProperties);
     //Probocar el cambio de estado en los useReducers de los suscriptores.

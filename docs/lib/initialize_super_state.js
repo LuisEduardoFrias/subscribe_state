@@ -1,6 +1,4 @@
 "use strict";
-/** @format */
-//
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Initialize = void 0;
 const functionalities_1 = require("./functionalities");
@@ -24,18 +22,15 @@ class Initialize {
         this._reducer = reducer;
         this._globalState = initialState;
     }
-    defaultReducer(state, action) {
-        console.log("undefined reducer");
-        return {};
-    }
-    clone() {
-        const clonedInstance = Object.create(this);
-        (0, functionalities_1.setObj)(clonedInstance, "reducer", this._reducer);
-        (0, functionalities_1.setObj)(clonedInstance, "globalState", Object.assign({}, this._globalState));
-        return clonedInstance;
-    }
     get globalState() {
-        return this._globalState;
+        /*
+        let aux = ({ name: "function name", value: this._globalState["function name"] });
+        Reflect.deleteProperty(this._globalState, "function name");
+
+        const clone: K = structuredClone(this._globalState);
+        Reflect.set(clone, aux.name, aux.value)
+        */
+        return structuredClone(this._globalState);
     }
     get reducer() {
         return this._reducer;

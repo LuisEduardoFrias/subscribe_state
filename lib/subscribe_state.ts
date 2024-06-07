@@ -1,5 +1,4 @@
-/**
-*/
+
 import { useReducer, useEffect } from "react";
 import { Action, GlobalState, Dispatch } from "./types";
 import { subCribe, middleDistpach, returnStateForSubscribe } from "./functionalities";

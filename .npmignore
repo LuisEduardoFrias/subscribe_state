@@ -1,7 +1,10 @@
 lib/
+!dist/lib/
 test/
 coverage
 node_modules
 .gitignore
+vite.config.js
+tsconfig.json
 index.ts
 package-lock.json

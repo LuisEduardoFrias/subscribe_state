@@ -19,11 +19,7 @@ export function getKeys(obj: object): string[] {
 
 //subCribe the components
 
-export function subCribe(
-  props: string[],
-  id: string,
-  dispatch: Dispatch
-): void {
+export function subCribe(props: string[], id: string, dispatch: Dispatch): void {
   SUB_CRIBER[id] = {
     props,
     dispatch,
@@ -31,10 +27,10 @@ export function subCribe(
 }
 
 //intermediator of the dispatch
-export function middleDistpach<T>(action: Action, reducer: Reducer): void {
-  //
+export function middleDistpach<T extends object>(action: Action, reducer: Reducer, readOnly: boolean = false): void {
   const initialized = Initialize.getInstance<T>();
 
+  //this.cloneObjectWithSeparateFunctions(this._globalState);
   const newState: T = reducer<T>(initialized.globalState, action);
 
   const changedProperties: (keyof T)[] = getChangedProperties<T>(
@@ -57,11 +53,14 @@ export function middleDistpach<T>(action: Action, reducer: Reducer): void {
             changedProperties[j] === props[i] ||
             changedProperties[j] === ALL
           ) {
-            const promesa = new Promise((resolve, _) => {
-              SUB_CRIBER[key as string].dispatch({ type: 'any' });
-              resolve(true);
-            });
-            promesa.then((_) => {});
+            console.log('readOnly: ',readOnly)
+            if (!readOnly) {
+              const promesa = new Promise((resolve, _) => {
+                SUB_CRIBER[key as string].dispatch({ type: 'any' });
+                resolve(true);
+              });
+              promesa.then((_) => { });
+            }
 
             isBreak = true;
             break;
@@ -92,15 +91,11 @@ function getChangedProperties<T>(oldState: T, newState: T): (keyof T)[] {
 }
 
 //returns the state with the specific properties of a subscriber
-export function returnStateForSubscribe<T>(
-  state: T,
-  callerFunction: string
-): T {
+export function returnStateForSubscribe<T>(state: T, callerFunction: string): T {
   let newState = {};
 
   if (SUB_CRIBER[callerFunction]) {
     const pros: string[] = SUB_CRIBER[callerFunction].props;
-
     for (let i: number = 0; i < pros.length; i++) {
       if (pros[i] === ALL) return state;
 

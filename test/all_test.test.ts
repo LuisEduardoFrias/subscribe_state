@@ -53,96 +53,106 @@ import useInitialize, { useSubscribeState, dispatch } from "../index"
 */
 
 type MyInfo = {
-    name: string,
-    lastName: string,
-    age: number,
-    //changeName: () => void
-    //changeLastName: () => void
+  name: string,
+  lastName: string,
+  age: number,
+  //changeName: () => void;
+  //changeLastName: () => void
 }
 
 type Action =
-    { type: "changeName", name: string } |
-    { type: "changeLastName", lastName: string } |
-    { type: "changeAge", age: number }
+  { type: "changeName", name: string } |
+  { type: "changeLastName", lastName: string } |
+  { type: "changeAge", age: number };
 
 const reducer = (state: MyInfo, action: Action) => {
-    const actions = {
-        changeName: () => {
-            return { ...state, name: action.name }
-        },
-        changeLastName: () => {
-            return { ...state, lastName: action.lastName }
-        },
-        changeAge: () => {
-            return { ...state, age: action.age }
-        },
-        default: () => {
-            throw new Error(`La accion ${action.type} no es valida.`);
-        }
+  const actions = {
+    changeName: () => {
+      return { ...state, name: action.name }
+    },
+    changeLastName: () => {
+      return { ...state, lastName: action.lastName }
+    },
+    changeAge: () => {
+      return { ...state, age: action.age }
+    },
+    default: () => {
+      throw new Error(`La accion ${action.type} no es valida.`);
     }
+  }
 
-    return (actions[action.type] ?? actions["default"])()
+  return (actions[action.type] ?? actions["default"])()
 }
 
 const myInfo: MyInfo = {
-    name: "luis",
-    lastName: "frias",
-    age: 29,
-    //changeName: () => { console.log("se ejecuto changeName"); },
-    //changeLastName: () => { console.log("se ejecuto changeLastName"); }
+  name: "luis",
+  lastName: "frias",
+  age: 29,
+  //changeName: () => { console.log("se ejecuto changeName"); },
+  //changeLastName: () => { console.log("se ejecuto changeLastName"); }
 }
 
 describe('Pruebas del funcionamiento externo', () => {
 
-    it('Lanza error al no pasar los parametros requeridos.', () => {
-        expect(() => useInitialize<MyInfo>()).toThrowError('The reducer parameter is required for instance Initialize.\nThe initialState parameter is required for instance Initialize.')
-        expect(() => useInitialize<MyInfo>(reducer)).toThrowError('The initialState parameter is required for instance Initialize.')
-    })
+  it('Lanza error al no pasar los parametros requeridos.', () => {
+    expect(() => useInitialize<MyInfo>()).toThrowError('The reducer parameter is required for instance Initialize.\nThe initialState parameter is required for instance Initialize.')
+    expect(() => useInitialize<MyInfo>(reducer)).toThrowError('The initialState parameter is required for instance Initialize.')
+  })
 
-    it('El useInitialize no debe lazar error.', () => {
-        expect(() => useInitialize<MyInfo>(reducer, myInfo)).not.toThrowError()
-    })
+  it('El useInitialize no debe lazar error.', () => {
+    expect(() => useInitialize<MyInfo>(reducer, myInfo)).not.toThrowError();
+  })
 
-    it('El primer valor de la tupla es un object.', () => {
-        const { result } = renderHook(() => useSubscribeState([]));
-        expect(result.current[0]).toBeTypeOf("object");
-    })
+  it('El primer valor de la tupla es un object.', () => {
+    const { result } = renderHook(() => useSubscribeState([]));
 
-    it('El segundo valor de la tupla es una funcion.', () => {
-        const { result } = renderHook(() => useSubscribeState([]));
-        expect(result.current[1]).toBeTypeOf("function");
-    })
+    expect(result.current[0]).toBeTypeOf("object");
+  })
+  it('El segundo valor de la tupla es una funcion.', () => {
+    const { result } = renderHook(() => useSubscribeState([]));
+    expect(result.current[1]).toBeTypeOf("function");
+  })
 
-    it('El objecto retornado debe ser igual a {}.', () => {
-        const { result } = renderHook(() => useSubscribeState([]));
-        expect(result.current[0]).toStrictEqual({});
-    })
+  it('El objecto retornado debe ser igual a {}.', () => {
+    const { result } = renderHook(() => useSubscribeState([]));
+    expect(result.current[0]).toStrictEqual({});
+  })
 
-    it('El objecto retornado debe ser igual a  myInfo.', () => {
-        const { result } = renderHook(() => useSubscribeState(["all"]));
-        expect(result.current[0]).toEqual(myInfo);
-    })
+  it('El objecto retornado debe ser igual a  myInfo.', () => {
+    const { result } = renderHook(() => useSubscribeState(["all"]));
+    expect(result.current[0]).toEqual(myInfo);
+  })
 
-    it('Cambia el valor de la propiedad \'name\' por \'jose\'.', () => {
-        const { result } = renderHook(() => useSubscribeState(["name"]));
-        act(() => result.current[1]({ type: "changeName", name: "jose" }));
-        expect(result.current[0].name).toBe("jose");
-    })
+  it('Cambia el valor de la propiedad \'name\' por \'jose\'.', () => {
+    const { result } = renderHook(() => useSubscribeState(["name"]));
+    act(() => result.current[1]({ type: "changeName", name: "jose" }));
+    expect(result.current[0].name).toBe("jose");
+  })
 
-    it('La propiedad \'age\' no debe existir.', () => {
-        const { result } = renderHook(() => useSubscribeState(["name"]));
-        expect(result.current[0].age).toBeUndefined();
-    })
-})
+  it('La propiedad \'age\' no debe existir.', () => {
+    const { result } = renderHook(() => useSubscribeState(["name"]));
+    expect(result.current[0].age).toBeUndefined();
+  })
+});
 
 describe('Pruebas del funcionamiento interno.', () => {
+  it('Retorna una instancia de Initialize.', () => {
+    expect(Initialize.getInstance()).toBeInstanceOf(Initialize)
+  })
 
-    it('Retorna una instancia de Initialize.', () => {
-        expect(Initialize.getInstance()).toBeInstanceOf(Initialize)
-    })
+  it('Verificar que se inicializo el estado global.', () => {
+    const initialized: Initialize = Initialize.getInstance();
+    expect(initialized.globalState).toEqual(myInfo)
+  })
 
-    it('Verificar que se inivializo el estado global.', () => {
-        const initialized: Initialize = Initialize.getInstance();
-        expect(initialized.globalState).toEqual(myInfo)
-    })
-})
+  it('Verificar que solo se lee 1 vez. p1', () => {
+    const { result } = renderHook(() => useSubscribeState(["name"], true));
+    act(() => result.current[1]({ type: "changeName", name: "carlos" }));
+    expect(result.current[0].name).toBe("jose");
+  })
+
+  it('Verificar que solo se lee 1 vez. p2', () => {
+    const { result } = renderHook(() => useSubscribeState(["name"]));
+    expect(result.current[0].name).toBe("carlos");
+  })
+});

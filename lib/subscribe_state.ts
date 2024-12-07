@@ -11,18 +11,17 @@ type ObjReducer = {
   value: number;
 };
 
-export default function useSubscribeState<T>(
+type onPostDispatch = <T>(action: Action, state: T, dispatch: (action: Action) => void) => void;
+
+export default function useSubscribeState<T extends object>(
   props: string[] = [],
-  postDispatch?: (
-    action: Action,
-    state: T,
-    dispatch: (action: Action) => void
-  ) => void
+  postDispatch?:  onPostDispatch | boolean,
+  readOnly?: boolean
 ): [T, Dispatch] {
   const initialized = Initialize.getInstance<T>();
 
   //reducer
-  function reducer(state: ObjReducer, _:Action): any {
+  function reducer(state: ObjReducer, _: Action): any {
     return { value: state.value === 0 ? 1 : 0 };
   }
 
@@ -43,15 +42,16 @@ export default function useSubscribeState<T>(
 
   //Check if a dispatch is added to execute before the execution continues.
   function outDispatch(action: Action) {
-    if (postDispatch) {
-      postDispatch(action, initialized.globalState, (_action: Action) => {
-        middleDistpach(_action, initialized.reducer);
+    if (typeof postDispatch === 'function') {
+      postDispatch<T>(action, initialized.globalState, (_action: Action) => {
+        middleDistpach(_action, initialized.reducer,readOnly);
       });
     } else {
-      middleDistpach(action, initialized.reducer);
+      middleDistpach(action, initialized.reducer,postDispatch);
     }
   }
 
+  //console.log('check subcribe 1: ', initialized)
   return [
     returnStateForSubscribe<T>(initialized.globalState, callerFunction),
     outDispatch,
@@ -59,5 +59,6 @@ export default function useSubscribeState<T>(
 }
 
 export function dispatch(action: Action) {
-  middleDistpach(action, Initialize.getInstance().reducer);
+  console.log('check dispatch 1: ', Initialize.getInstance())
+  middleDistpach(action, Initialize.getInstance().reducer, false);
 }

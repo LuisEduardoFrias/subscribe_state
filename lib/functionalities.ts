@@ -53,7 +53,7 @@ export function middleDistpach<T extends object>(action: Action, reducer: Reduce
             changedProperties[j] === props[i] ||
             changedProperties[j] === ALL
           ) {
-            console.log('readOnly: ',readOnly)
+
             if (!readOnly) {
               const promesa = new Promise((resolve, _) => {
                 SUB_CRIBER[key as string].dispatch({ type: 'any' });

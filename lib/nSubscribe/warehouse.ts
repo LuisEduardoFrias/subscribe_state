@@ -1,40 +1,54 @@
-//
-import { Reducer } from './types.js';
-import { getKeys, setObj } from './functionalities.js';
 
-export default function useInitialize<T extends object>(reducer?: Reducer, initialState?: T): void {
-  Initialize.getInstance(reducer, initialState);
+import { setInitialState } from './types'
+
+export default function warehouse<T>(setState: setInitialState) {
+
+
+  type reference = { state: T };
+
+  const refState = { current: { state: null } };
+
+  const _update = (_fn: functSetterType) => {
+    const newState = _fn<T>(refState.current.state!);
+
+    refState.current = { state: newState };
+    console.log(newState)
+  }
+
+  refState.current = { state: setState<T>(_update) as T };
+
+
+  const functions: { [key: string]: Function } = {};
+
+  for (const key in refState.current?.state!) {
+    if (typeof refState.current.state![key] === 'function') {
+      functions[key] = refState.current.state![key] as Function;
+    }
+  }
+
+  return (ar: string[]) => ({
+    state: ar.filter((key: string) => refState.current.state![key]),
+    actions: functions
+  });
 }
 
-export class Initialize<T extends object>{
-  private _reducer: Reducer;
+
+export class Initialize<T>{
   private _globalState: T;
   private static _instance: Initialize<any>;
 
-  public static getInstance<J extends object>(
-    reducer?: Reducer,
-    initialState?: J
-  ): Initialize<J> {
+  public static getInstance<J>(initialState: J): Initialize<J> {
     if (!Initialize._instance) {
-      if (!reducer || !initialState)
-        throw new Error(
-          `${!reducer
-            ? 'The reducer parameter is required for instance Initialize.'
-            : ''
-          }${!reducer && !initialState ? '\n' : ''}${!initialState
-            ? 'The initialState parameter is required for instance Initialize.'
-            : ''
-          }`
-        );
+      if (!initialState)
+        throw new Error('The initialState parameter is required for generat the global state warehouse.');
 
-      Initialize._instance = new Initialize<J>(reducer, initialState);
+      Initialize._instance = new Initialize<J>(initialState);
     }
 
     return Initialize._instance;
   }
 
-  private constructor(reducer: Reducer, initialState: T) {
-    this._reducer = reducer;
+  private constructor(initialState: T) {
     this._globalState = initialState;
   }
 
@@ -42,10 +56,10 @@ export class Initialize<T extends object>{
     return this._globalState;
   }
 
-  public get reducer(): Reducer {
-    return this._reducer;
-  }
+}
 
+
+/*
   private cloneObjectWithSeparateFunctions(originalObject: T): T {
     const functions: { [key: string]: Function } = {};
 
@@ -74,4 +88,4 @@ export class Initialize<T extends object>{
       });
     }
   }
-}
+  */

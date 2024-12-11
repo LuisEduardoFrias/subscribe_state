@@ -43,7 +43,7 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
   }
 
   private splitState(initialState: T & K): [T, K] {
-    throw new ERROR('completa en splitState')
+    throw new Error('completa en splitState')
     return [{} as T, {} as K]
   }
 
@@ -73,7 +73,7 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
   public updateGlobalState(newState: T, modifiedProperties: (keyof T)[]): void {
     let key: keyof T;
     for (key of modifiedProperties) {
-      Reflext.set(this._globalState, key, newState[key]);
+      Reflect.set(this._globalState, key, newState[key]);
     }
   }
 }

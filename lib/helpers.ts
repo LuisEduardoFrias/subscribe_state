@@ -20,7 +20,7 @@ export function useActions<T extends { [key in keyof T]: Action }>(actions: stri
 }
 
 export function update<T extends object>(updateState: UpdateState) {
-  dispatch(updateState<T>(Warehouse.globalState))
+  dispatch(updateState<T>(structuredClone(Warehouse.globalState)))
 }
 
 export function createWarehouse<T extends object, K extends { [key in keyof K]: Action }>(createInitialState: (update: Update) => T & K) {

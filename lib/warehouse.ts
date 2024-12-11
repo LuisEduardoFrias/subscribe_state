@@ -1,22 +1,22 @@
 
-import { Action, Subscribers, Subscriber, ALL } from './types'
+import { Action, Subscribers, Subscriber, ALL } from './types.js'
 
 export class Warehouse<T extends object, K extends { [key in keyof K]: Action }> {
   private _globalState: T;
   private _Actions: { [key in keyof K]: Action };
   private _subscriber: Subscribers;
 
-  private static _instance: Initialize<J, I>;
+  private static _instance: Warehouse<any,any>;
 
-  public static getInstance<J extends object, I extends { [key in keyof I]: Action }>(initialState?: J & I): Initialize<J, I> {
+  public static getInstance<J extends object, I extends { [key in keyof I]: Action }>(initialState?: J & I): Warehouse<J, I> {
 
-    if (Initialize._instance) {
+    if (Warehouse._instance) {
       if (!initialState) throw new Error("You must provide a value for the 'initialState' argument.");
 
-      Initialize._instance = new Initialize<J, I>(initialState);
+      Warehouse._instance = new Warehouse<J, I>(initialState);
     }
-
-    return Initialize._instance
+ 
+    return Warehouse._instance
   }
 
   private constructor(initialState: T & K) {
@@ -24,13 +24,14 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
 
     this._globalState = state;
     this._Actions = actions;
+    this._subscriber = {} as Subscribers;
   }
 
   public get globalState(): T {
     return this._globalState;
   }
 
-  public get actions(): K {
+  public get actions(): { [key in keyof K]: Action } {
     return this._Actions;
   }
 
@@ -44,6 +45,7 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
 
   private splitState(initialState: T & K): [T, K] {
     throw new Error('completa en splitState')
+    console.log(initialState)
     return [{} as T, {} as K]
   }
 

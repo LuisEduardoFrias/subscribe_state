@@ -1,16 +1,15 @@
 
-import { Action, Update, UpdateState } from './types.js';
-import { ALL } from './constants.js';
+import { Action, Update, UpdateState, ALL } from './types.js';
 import { Warehouse } from './warehouse.js';
 
-export function useActions<T extends { [key in keyof T]: Action }>(actions: string | string[]): T {
-  const warehouse = Warehouse.getInstance();
+export function useActions<T extends { [key in keyof T]: Action }>(actions: string | string[]): { [key in keyof T]: Action } {
+  const warehouse = Warehouse.getInstance<any, T>();
 
   const _actions = Array.isArray(actions) ? actions : [actions];
 
   if (_actions[0] === ALL) return warehouse.actions;
 
-  const functionsAction = {} as T
+  const functionsAction = {} as T;
 
   for (const _action of _actions) {
     Reflect.set(functionsAction, _action, warehouse.actions[_action as keyof T])
@@ -20,12 +19,12 @@ export function useActions<T extends { [key in keyof T]: Action }>(actions: stri
 }
 
 export function update<T extends object>(updateState: UpdateState) {
-  dispatch(updateState<T>(structuredClone(Warehouse.globalState)))
+  const warehouse = Warehouse.getInstance<T, any>();
+  dispatch(updateState<T>(structuredClone(warehouse.globalState)))
 }
 
 export function createWarehouse<T extends object, K extends { [key in keyof K]: Action }>(createInitialState: (update: Update) => T & K) {
-  let warehouse: Warehouse;
-  warehouse = Warehouse.getInstance<T, K>(createInitialState(update));
+  Warehouse.getInstance<T, K>(createInitialState(update));
 }
 
 function dispatch<T extends object, K extends { [key in keyof K]: Action }>(newState: T): void {
@@ -41,9 +40,9 @@ function dispatch<T extends object, K extends { [key in keyof K]: Action }>(newS
 
   warehouse.updateGlobalState(newState, changedProperties);
 
-  for (const subscriber in warehouse.subscriber) {
+  for (const subscriber of Object.values(warehouse.subscriber)) {
     for (const prop of subscriber.props) {
-      if (hangedProperties.includes(prop) || prop === ALL) {
+      if (changedProperties.includes(prop as keyof T) || prop === ALL) {
         const promesa = new Promise((resolve, _) => {
           subscriber.dispatch();
           resolve(true);

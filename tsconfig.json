@@ -2,8 +2,8 @@
   "compilerOptions": {
     /* Visite https://aka.ms/tsconfig para leer más sobre este archivo */
     /* Proyectos */
-    // "incremental": true,                              /* Guardar archivos .tsbuildinfo para permitir la compilación incremental de proyectos. */
-    ///"composite": true /* Habilitar restricciones que permiten que un proyecto TypeScript se utilice con referencias de proyecto. */,
+    "incremental": true, /* Guardar archivos .tsbuildinfo para permitir la compilación incremental de proyectos. */
+    "composite": true /* Habilitar restricciones que permiten que un proyecto TypeScript se utilice con referencias de proyecto. */,
     //"tsBuildInfoFile": "./.tsbuildinfo" /* Especificar la ruta al archivo de compilación incremental .tsbuildinfo. */,
     // "disableSourceOfProjectReferenceRedirect": true,  /* Deshabilitar la preferencia de archivos fuente en lugar de archivos de declaración al referenciar proyectos compuestos. */
     // "disableSolutionSearching": true,                 /* Optar un proyecto por no verificar referencias a múltiples proyectos al editar. */

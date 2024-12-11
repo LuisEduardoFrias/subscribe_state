@@ -1,8 +1,8 @@
 
-export { useActions, update } from './lib/helpers'
-export { Action, Update } from './lib/types.ts'
-export { useSubscriberState } from './lib/use_subscriber_state'
-import { createWarehouse } from './lib/helpers'
+export { useActions, update } from './helpers.js'
+export { Action, Update } from './types.js'
+export { useSubscriberState } from './use_subscriber_state.js'
+import { createWarehouse } from './helpers.js'
 
 export { createWarehouse };
 export default createWarehouse;

@@ -13,6 +13,6 @@ export type Subscriber = {
 
 export type Prop = string | string[];
 
-export type UpdateState = (state: T) => T;
+export type UpdateState = <T>(state: T) => T;
 
 export type Update = (updateState: UpdateState) => void;

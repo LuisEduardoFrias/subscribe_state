@@ -1,18 +1,17 @@
 import { useReducer, useCallback } from 'react'
-import { Action, Props } from './types'
-import { addSubscriber } from './helpers'
-import { Warehouse } from './warehouse'
+import { Action, Prop } from './types.js'
+import { Warehouse } from './warehouse.js'
 
-const reducer = <T>(state: T, _: any): boolean => !state;
+const reducer = (state: boolean, _: any): boolean => !state;
 
-export default function useSubscriberState<T extends object, K extends { [key in keyof K]: Action }>(
-  props: Props,
+export function useSubscriberState<T extends object, K extends { [key in keyof K]: Action }>(
+  props: Prop,
   notNotify: boolean = false
 ): [T, { [key in keyof K]: Action }] {
 
   const warehouse = Warehouse.getInstance<T, K>();
 
-  const [_, dispatch] = useReducer<T>(reducer, false);
+  const [_, dispatch] = useReducer(reducer, false);
 
   //Get component name/ don't touch it!
   const componentName: string =
@@ -20,18 +19,18 @@ export default function useSubscriberState<T extends object, K extends { [key in
     'crypto.randomUUID';
 
   const _addSubscriber = useCallback(() => {
-    initialized.setSubscriber(
-      { 
-        props: Array.isArray(props) ? props : [props], 
+    warehouse.setSubscriber(
+      {
+        props: Array.isArray(props) ? props : [props],
         dispatch: () => dispatch({}),
         notNotify
-        }, componentName);
+      }, componentName);
   }, [props, componentName, dispatch])
 
   _addSubscriber();
 
   return [
-    initialized.getGlobalStateBySubscriber(componentName),
-    initialized.actions,
+    warehouse.getGlobalStateBySubscriber(componentName),
+    warehouse.actions,
   ];
 }

@@ -1,31 +1,18 @@
-//import type Initialize from './initialize_super_state.js';
 
-export type AnySubCriber = {
-  [key: string]: SubCriber;
+export const ALL = 'all';
+
+export type Action = (value: any) => void;
+
+export type Subscribers = { [key: string]: Subscriber };
+
+export type Subscriber = {
+  props: string[],
+  dispatch: () => void,
+  notNotify: boolean
 };
 
-export type SubCriber = {
-  props: string[];
-  dispatch: Dispatch;
-};
+export type Prop = string | string[];
 
-export type OutReducer = {
-  fn: Reducer;
-};
+export type UpdateState = (state: T) => T;
 
-export type Dispatch = (action: Action) => void;
-
-export type Action = {
-  type: any;
-  [key: string]: any;
-};
-
-export type GlobalState = {
-  [key: string]: any;
-};
-
-export type Reducer = <T>(state: T, actions: any) => T;
-
-export type AnyObject = {
-  [key: string]: any;
-};
+export type Update = (updateState: UpdateState) => void;

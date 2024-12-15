@@ -23,8 +23,9 @@ export function update<T extends object>(updateState: UpdateState) {
   dispatch(updateState<T>(structuredClone(warehouse.globalState)))
 }
 
-export function createWarehouse<T extends object, K extends { [key in keyof K]: Action }>(createInitialState: (update: Update) => T & K) {
-  Warehouse.getInstance<T, K>(createInitialState(update));
+export function createWarehouse<T extends object, K extends { [key in keyof K]: Action }>(createInitialState: (update: Update) => T & K | (T & K)) {
+  const isFunttion = typeof createInitialState === 'function';
+  Warehouse.getInstance<T, K>(isFunttion ? createInitialState(update) :createInitialState);
 }
 
 function dispatch<T extends object, K extends { [key in keyof K]: Action }>(newState: T): void {

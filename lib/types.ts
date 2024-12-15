@@ -1,7 +1,9 @@
 
 export const ALL = 'all';
 
-export type Action = (value: any) => void;
+type _object = { [key: string | number | symbol]: any };
+
+export type Action = (value: string | number | boolean | _object | Array<any>) => void;
 
 export type Subscribers = { [key: string]: Subscriber };
 

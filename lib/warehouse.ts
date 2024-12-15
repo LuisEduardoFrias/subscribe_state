@@ -6,7 +6,7 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
   private _Actions: { [key in keyof K]: Action };
   private _subscriber: Subscribers;
 
-  private static _instance: Warehouse<any,any>;
+  private static _instance: Warehouse<any, any>;
 
   public static getInstance<J extends object, I extends { [key in keyof I]: Action }>(initialState?: J & I): Warehouse<J, I> {
 
@@ -15,15 +15,15 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
 
       Warehouse._instance = new Warehouse<J, I>(initialState);
     }
- 
+
     return Warehouse._instance
   }
 
   private constructor(initialState: T & K) {
     const [state, actions] = this.splitState(initialState);
 
-    this._globalState = state;
-    this._Actions = actions;
+    this._globalState = state as T;
+    this._Actions = actions as K;
     this._subscriber = {} as Subscribers;
   }
 
@@ -43,11 +43,23 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
     Reflect.set(this._subscriber, componentName, subscriber);
   }
 
-  private splitState(initialState: T & K): [T, K] {
-    throw new Error('completa en splitState')
-    console.log(initialState)
-    return [{} as T, {} as K]
+  private splitState<T extends object, K extends { [key in keyof K]: Action }>(initialState: T & K): [T, K] {
+    const state: T = {} as T;
+    const functions: K = {} as K;
+    type TKeys = keyof T;
+    type KKeys = keyof K;
+
+    for (const key in initialState) {
+      if (typeof initialState[key as TKeys & KKeys] === 'function') {
+        functions[key as KKeys] = initialState[key as KKeys] as K[KKeys];
+      } else {
+        state[key as TKeys] = initialState[key as TKeys] as T[TKeys];
+      }
+    }
+
+    return [state, functions];
   }
+
 
   //returns the state with the specific properties of a subscriber
   public getGlobalStateBySubscriber(componentName: string) {

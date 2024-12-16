@@ -1,5 +1,5 @@
 
-import createWarehouse, { type Update, update } from 'subscribe_state';
+import { createWarehouse, update } from 'subscribe_state';
 
 type State = {
   counter: number,
@@ -27,7 +27,7 @@ function onChangeDarkMode(isDarkMode: boolean) {
   update<State>((state: State): State => ({ ...state, darkMode: isDarkMode }))
 };
 
-warehouse<State, Actions>({
+createWarehouse<State, Actions>({
   counter: 0,
   text: 'wold',
   darkMode: true,

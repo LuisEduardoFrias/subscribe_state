@@ -1,4 +1,4 @@
-# subscribe_state
+# subscriber_state
 ** Un manejador de estado global simple y flexible para aplicaciones React **
 
 ## Descripción
@@ -15,7 +15,7 @@ suscribir componentes a los cambios de estado.
 
 ## Instalación
 ```bash
-  npm install subscribe_state
+  npm install subscriber_state
 ```
 
 ## API
@@ -75,7 +75,7 @@ suscribir componentes a los cambios de estado.
 ### createWarehouse
 Ejemolo 1:
 ```ts
-import { createWarehouse, update } from 'subscribe_state';
+import { createWarehouse, update } from 'subscriber_state';
 
 type State = {
   counter: number,
@@ -115,7 +115,7 @@ createWarehouse<State, Actions>({
 
 Ejemolo 2:
 ```ts
-import { createWarehouse, type Update } from 'subscribe_state';
+import { createWarehouse, type Update } from 'subscriber_state';
 
 type State = {
   counter: number,
@@ -150,7 +150,7 @@ createWarehouse<State, Actions>((update: Update)=>({
 ### useActions
 Ejemplo 1:
 ```tsx
-import { useActions } from 'subscribe_state'
+import { useActions } from 'subscriber_state'
 
 function App() {
   //Acción Específica: Este ejemplo extrae directamente la acción onIncrementCounter del almacén.
@@ -165,7 +165,7 @@ function App() {
 
 Ejemplo 2:
 ```tsx
-import { useActions } from 'subscribe_state'
+import { useActions } from 'subscriber_state'
 
 function App() {
   // Todas las Acciones: Este ejemplo recupera todas las acciones definidas en el almacén.
@@ -182,7 +182,7 @@ function App() {
 ### useSubscriber
 ejemplo 1
 ```tsx
- import { useSubscriber } from 'subscribe_state'
+ import { useSubscriber } from 'subscriber_state'
 
 export default function InsertText() {
   const [{ darkMode }, { onChangeText }] = useSubscriber('darkMode');
@@ -193,7 +193,7 @@ export default function InsertText() {
 
 ejemplo 2
 ```tsx
-import { useSubscriber } from 'subscribe_state'
+import { useSubscriber } from 'subscriber_state'
 
 export default function InsertText() {
   const [state, { onChangeText }] = useSubscriber(['darkMode', 'counter']);

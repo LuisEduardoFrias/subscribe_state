@@ -1,48 +1,48 @@
 {
-    "name": "subscribe_state",
-    "version": "2.0.0",
-    "description": "subscribeState es un hook de react para controlar el estado de tus aplicaciones, basado en suscripciones, suscribiendote a las propiedades del estado.",
-    "main": "dist/index.js",
-    "type": "module",
-    "directories": {
-        "lib": "lib"
-    },
-    "scripts": {
-        "build": "tsc",
-        "test": "vitest",
-        "coverage": "vitest run --coverage"
-    },
-    "publishConfig": {
-        "registry": "https://registry.npmjs.org/"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/LuisEduardoFrias/super_state.git"
-    },
-    "author": "LuisEduardoFrias",
-    "keywords": [
-        "react",
-        "state",
-        "global",
-        "subcribe"
-    ],
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/LuisEduardoFrias/super_state/issues"
-    },
-    "homepage": "https://github.com/LuisEduardoFrias/super_state#readme",
-    "dependencies": {
-        "react": "^18.3.1"
-    },
-    "devDependencies": {
-        "@testing-library/react": "^15.0.1",
-        "@types/node": "^20.12.7",
-        "@types/react": "^18.2.63",
-        "@vitejs/plugin-react": "^4.2.1",
-        "@vitest/coverage-v8": "^1.5.0",
-        "jsdom": "^24.0.0",
-        "typescript": "^5.4.2",
-        "vitest": "^1.5.0"
-    },
-    "eslintConfig": "./node_modules/standard/eslintrc.json"
+  "name": "subscriber_state",
+  "version": "2.0.0",
+  "description": "subscriberState es un hook de react para controlar el estado de tus aplicaciones, basado en suscripciones, suscribiendote a las propiedades del estado.",
+  "main": "dist/index.js",
+  "type": "module",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LuisEduardoFrias/super_state.git"
+  },
+  "author": "LuisEduardoFrias",
+  "keywords": [
+    "react",
+    "state",
+    "global",
+    "subcribe"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LuisEduardoFrias/super_state/issues"
+  },
+  "homepage": "https://github.com/LuisEduardoFrias/super_state#readme",
+  "dependencies": {
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^15.0.1",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.63",
+    "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/coverage-v8": "^1.5.0",
+    "jsdom": "^24.0.0",
+    "typescript": "^5.4.2",
+    "vitest": "^1.5.0"
+  },
+  "eslintConfig": "./node_modules/standard/eslintrc.json"
 }

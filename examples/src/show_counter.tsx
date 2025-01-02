@@ -1,8 +1,8 @@
 
-import { useSubscriber } from 'subscribe_state'
+import { useSubscriberState } from 'subscribe_state'
 
 export default function ShowCounter() {
-  const [{ counter }] = useSubscriber(['counter']);
+  const [{ counter }] = useSubscriberState(['counter']);
 
   return (
     <div style={{ displey: 'flex', padding: '5px', border: '2px solid red', margin: '10px' }}>

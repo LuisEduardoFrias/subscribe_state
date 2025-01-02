@@ -1,6 +1,6 @@
-import { useSubscriber } from 'subscribe_state';
+import { useSubscriberState } from 'subscribe_state';
 export default function ThemeDark() {
-    const [{ darkMode }] = useSubscriber(['darkMode']);
+    const [{ darkMode }] = useSubscriberState(['darkMode']);
     const _Style = {
         backgroundColor: darkMode ? 'black' : 'white',
         color: !darkMode ? 'black' : 'white',

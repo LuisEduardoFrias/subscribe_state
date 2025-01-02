@@ -1,16 +1,14 @@
 
 export const ALL = 'all';
 
-type _object = { [key: string | number | symbol]: any };
-
-export type Action = (value: string | number | boolean | _object | Array<any>) => void;
+export type Action = (value: any) => void;
 
 export type Subscribers = { [key: string]: Subscriber };
 
 export type Subscriber = {
-  props: string[],
-  dispatch: () => void,
-  notNotify: boolean
+	props: string[],
+	dispatch: () => void,
+	notNotify: boolean
 };
 
 export type Prop = string | string[];

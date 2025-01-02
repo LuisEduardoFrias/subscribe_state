@@ -1,9 +1,9 @@
 
 import React from 'react'
-import {useSubscriber} from 'subscribe_state'
+import { useSubscriberState } from 'subscribe_state'
 
 export default function InsertText() {
-  const [{ darkMode }, { onChangeText }] = useSubscriber(['darkMode'],true);
+  const [{ darkMode }, { onChangeText }] = useSubscriberState(['darkMode'], true);
 
   return (
     <div style={{

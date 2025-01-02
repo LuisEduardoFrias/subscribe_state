@@ -1,6 +1,6 @@
-import { useSubscriber } from 'subscribe_state';
+import { useSubscriberState } from 'subscribe_state';
 export default function ShowCounter() {
-    const [{ counter }] = useSubscriber(['counter']);
+    const [{ counter }] = useSubscriberState(['counter']);
     return (React.createElement("div", { style: { displey: 'flex', padding: '5px', border: '2px solid red', margin: '10px' } },
         React.createElement("h2", null, "Show Counter"),
         React.createElement("span", null, "This counter is :"),

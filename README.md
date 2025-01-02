@@ -19,7 +19,9 @@ suscribir componentes a los cambios de estado.
 ```
 
 ## API
-  * createWarehouse: Función principal para crear un almacén de estado.
+  ### createWarehouse
+    Función principal para crear un almacén de estado.
+    
     * Descripción detallada: Esta función se utiliza para definir el estado inicial de una aplicación y las acciones que pueden modificar ese estado. 
       El estado inicial se proporciona como un objeto que cumple con el tipo T, y las acciones se definen como funciones que modifican el estado.
       La función createWarehouse crea un almacén que puede ser utilizado para suscribirse a cambios en el estado y realizar actualizaciones.
@@ -33,9 +35,11 @@ suscribir componentes a los cambios de estado.
       (update) y devuelve el estado inicial u objeto de que cumple con los tipos
       T y K
 
-  * update: Función realiza una llanada a actializar el estado.
+  ### update
+    Función realiza una llanada a actializar el estado.
 
-  * useActions: El hook useActions, es una utilidad para acceder y utilizar las acciones definidas dentro de un almacén de estado global.
+  ### useActions
+    El hook useActions, es una utilidad para acceder y utilizar las acciones definidas dentro de un almacén de estado global.
     Ofrece una manera conveniente de interactuar directamente con el estado, desencadenando actualizaciones.
     
     * Descripción:
@@ -53,8 +57,9 @@ suscribir componentes a los cambios de estado.
       
       * Tipo de Retorno: Un objeto que contiene las acciones especificadas como funciones.
 
-  * useSubscriber: Hook para suscribirse a propiedades del estado.
-    * Descripción detallada: useSubscriber te permite "escuchar" los cambios que ocurren en una o varias propiedades de tu estado global. 
+  ### useSubscriberState
+    Hook para suscribirse a propiedades del estado.
+    * Descripción detallada: useSubscriberState te permite "escuchar" los cambios que ocurren en una o varias propiedades de tu estado global. 
     Cuando alguna de estas propiedades se actualiza, tu componente se re-renderizará automáticamente, reflejando los nuevos valores.
 
     * Parámetros:
@@ -66,7 +71,7 @@ suscribir componentes a los cambios de estado.
       Si lo estableces en true, el re-renderizado se evetara.
       
     * Retorno: 
-      El hook useSubscriber devuelve una tupla (un array) con dos elementos:
+      El hook useSubscriberState devuelve una tupla (un array) con dos elementos:
       * objeto 1: Contiene las propiedades a las que te has suscrito. Puedes acceder a sus valores directamente.
       * objeto 2: Contiene todas las acciones disponibles en tu almacén de estado. Esto te permite modificar el estado si es necesario.
 
@@ -179,13 +184,13 @@ function App() {
 }
 ```
 
-### useSubscriber
+### useSubscriberState
 ejemplo 1
 ```tsx
- import { useSubscriber } from 'subscriber_state'
+ import { useSubscriberState } from 'subscriber_state'
 
 export default function InsertText() {
-  const [{ darkMode }, { onChangeText }] = useSubscriber('darkMode');
+  const [{ darkMode }, { onChangeText }] = useSubscriberState('darkMode');
 
   return (...);
 }
@@ -193,10 +198,10 @@ export default function InsertText() {
 
 ejemplo 2
 ```tsx
-import { useSubscriber } from 'subscriber_state'
+import { useSubscriberState } from 'subscriber_state'
 
 export default function InsertText() {
-  const [state, { onChangeText }] = useSubscriber(['darkMode', 'counter']);
+  const [state, { onChangeText }] = useSubscriberState(['darkMode', 'counter']);
 
   const color: state.darkMode ? '#0a9aff' : '#000000';
   //chroma libreria externa.

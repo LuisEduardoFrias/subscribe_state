@@ -10,7 +10,7 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
 
   public static getInstance<J extends object, I extends { [key in keyof I]: Action }>(initialState?: J & I): Warehouse<J, I> {
 
-    if (Warehouse._instance) {
+    if (!Warehouse._instance) {
       if (!initialState) throw new Error("You must provide a value for the 'initialState' argument.");
 
       Warehouse._instance = new Warehouse<J, I>(initialState);

@@ -2,7 +2,7 @@ import { useReducer, useCallback } from 'react'
 import { Action, Prop } from './types.js'
 import { Warehouse } from './warehouse.js'
 
-const reducer = (state: boolean, _: any): boolean => !state;
+const reducer = () => true; // Simplified reducer
 
 export function useSubscriberState<T extends object, K extends { [key in keyof K]: Action }>(
   props: Prop,
@@ -11,23 +11,26 @@ export function useSubscriberState<T extends object, K extends { [key in keyof K
 
   const warehouse = Warehouse.getInstance<T, K>();
 
-  const [_, dispatch] = useReducer(reducer, false);
+  const [_, forceUpdate] = useReducer(reducer, false);
 
-  //Get component name/ don't touch it!
-  const componentName: string =
-    new Error().stack?.split('\n')[2].trim().split(' ')[1] ??
-    'crypto.randomUUID';
+  // Get component name 
+  const componentName = new Error().stack?.split('\n')[2].trim().split(' ')[1] ?? 'crypto.randomUUID()'; 
 
-  const _addSubscriber = useCallback(() => {
+  useEffect(() => {
     warehouse.setSubscriber(
       {
         props: Array.isArray(props) ? props : [props],
-        dispatch: () => dispatch({}),
-        notNotify
-      }, componentName);
-  }, [props, componentName, dispatch])
+        dispatch: forceUpdate, 
+        notNotify,
+      },
+      componentName
+    );
 
-  _addSubscriber();
+    // Cleanup: Remove subscriber on unmount
+    return () => {
+      delete warehouse.subscriber[componentName]; 
+    };
+  }, [warehouse, props, notNotify, componentName, forceUpdate]);
 
   return [
     warehouse.getGlobalStateBySubscriber(componentName),

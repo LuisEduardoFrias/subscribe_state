@@ -2,16 +2,16 @@
   "compilerOptions": {
     /* Visite https://aka.ms/tsconfig para leer más sobre este archivo */
     /* Proyectos */
-    "incremental": true, /* Guardar archivos .tsbuildinfo para permitir la compilación incremental de proyectos. */
-    "composite": true /* Habilitar restricciones que permiten que un proyecto TypeScript se utilice con referencias de proyecto. */,
+    "incremental": false, /* Guardar archivos .tsbuildinfo para permitir la compilación incremental de proyectos. */
+    "composite": false /* Habilitar restricciones que permiten que un proyecto TypeScript se utilice con referencias de proyecto. */,
     //"tsBuildInfoFile": "./.tsbuildinfo" /* Especificar la ruta al archivo de compilación incremental .tsbuildinfo. */,
     // "disableSourceOfProjectReferenceRedirect": true,  /* Deshabilitar la preferencia de archivos fuente en lugar de archivos de declaración al referenciar proyectos compuestos. */
     // "disableSolutionSearching": true,                 /* Optar un proyecto por no verificar referencias a múltiples proyectos al editar. */
     // "disableReferencedProjectLoad": true,             /* Reducir la cantidad de proyectos cargados automáticamente por TypeScript. */
     /* Lenguaje y Entorno */
-    "target": "es2016" /* Establecer la versión del lenguaje JavaScript para el JavaScript emitido e incluir declaraciones de biblioteca compatibles. */,
+    "target": "ES2023" /* Establecer la versión del lenguaje JavaScript para el JavaScript emitido e incluir declaraciones de biblioteca compatibles. */,
     "lib": [
-      "es2016"
+      "ES2023"
     ] /* Especificar un conjunto de archivos de declaración de biblioteca empaquetados que describen el entorno de tiempo de ejecución objetivo. */,
     "jsx": "react", /* Especificar qué código JSX se genera. */
     // "experimentalDecorators": true,                   /* Habilitar el soporte experimental para decoradores experimentales heredados. */
@@ -24,9 +24,9 @@
     // "useDefineForClassFields": true,                  /* Emitir campos de clase compatibles con el estándar ECMAScript. */
     // "moduleDetection": "auto",                        /* Controlar qué método se utiliza para detectar archivos JS con formato de módulo. */
     /* Módulos */
-    "module": "node16" /* Especificar qué código de módulo se genera. */,
+    "module": "ESNext" /* Especificar qué código de módulo se genera. */,
     "rootDir": "./lib" /* Especificar la carpeta raíz dentro de sus archivos fuente. */,
-    "moduleResolution": "node16" /* Especificar cómo TypeScript busca un archivo a partir de un especificador de módulo dado. */,
+    "moduleResolution": "Bundler" /* Especificar cómo TypeScript busca un archivo a partir de un especificador de módulo dado. */,
     "baseUrl": "./" /* Especificar el directorio base para resolver nombres de módulos no relativos. */,
     "paths": {
       /* Especificar un conjunto de entradas que vuelven a mapear las importaciones a ubicaciones de búsqueda adicionales. */

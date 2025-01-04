@@ -9,10 +9,10 @@ export function useActions<T extends { [key in keyof T]: Action }>(actions?: str
 
 	const _actions = Array.isArray(actions) ? actions : [actions];
 
-	const functionsAction = _actions.reduce<T>((acc, action) => {
+	const functionsAction = _actions.reduce<{ [key in keyof T]: Action }>((acc, action) => {
 		acc[action as keyof T] = warehouse.actions[action as keyof T];
 		return acc;
-	}, {} as T);
+	}, {} as { [key in keyof T]: Action });
 
 	return functionsAction;
 }
@@ -54,5 +54,5 @@ function equal<T>(obj1: T, obj2: T): boolean {
 
 function getChangedProperties<T extends object>(newState: T, oldState: T): (keyof T)[] {
 	return Object.keys(newState)
-		.filter((key) => !equal(oldState[key as keyof T], newState[key])) as (keyof T)[];
+		.filter((key) => !equal(oldState[key as keyof T], newState[key as keyof T])) as (keyof T)[];
 }

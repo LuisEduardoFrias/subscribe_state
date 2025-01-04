@@ -72,7 +72,7 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
 
 		const newState: Partial<T> = {};
 		for (const prop of subscriber.props) {
-			newState[prop] = this.globalState[prop];
+			newState[prop as keyof T] = this.globalState[prop as keyof T];
 		}
 
 		return structuredClone(newState);

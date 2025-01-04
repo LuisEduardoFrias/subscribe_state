@@ -40,7 +40,7 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
 	}
 
 	public setSubscriber(subscriber: Subscriber, componentName: string) {
-		Reflect.set(this._subscriber, componentName, subscriber);
+		this._subscriber[componentName] = subscriber;
 	}
 
 	private splitState<T extends object, K extends { [key in keyof K]: Action }>(initialState: T & K): [T, K] {
@@ -64,7 +64,7 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
 	public getGlobalStateBySubscriber(componentName: string): Partial<T> {
 		const subscriber = Reflect.get(this._subscriber, componentName);
 
-		if (!subscriber) throw new Error(`The subscriber ${componentName} not exists.`);
+		if (!subscriber) throw new Error(`The subscriber '${componentName}' not exists.`);
 
 		if (subscriber.props.includes(ALL)) {
 			return structuredClone(this.globalState);

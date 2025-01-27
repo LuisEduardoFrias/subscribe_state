@@ -15,15 +15,15 @@ type myActions = {
 }
 
 function changeName(name: string) {
-	update(<myState>(state: myState): myState => ({ ...state, name }));
+	update((state: myState): myState => ({ ...state, name }));
 };
 
 function changeLastName(lastName: string) {
-	update(<myState>(state: myState): myState => ({ ...state, lastName }));
+	update((state: myState): myState => ({ ...state, lastName }));
 };
 
 function changeAge(age: number) {
-	update(<myState>(state: myState): myState => ({ ...state, age }));
+	update((state: myState): myState => ({ ...state, age }));
 };
 
 const initState = {
@@ -99,7 +99,7 @@ describe('Pruebas del funcionamiento externo', () => {
 	})
 
 	it('La 4.', () => {
-		act(() => update(<myState>(state: myState): myState => ({ ...state, name:'maikol' })));
+		act(() => update((state: myState): myState => ({ ...state, name:'maikol' })));
 	})
 	
 	it('La 5.', () => {

@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "dev": "vite examples/src/main  --port=3000 --host",
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },

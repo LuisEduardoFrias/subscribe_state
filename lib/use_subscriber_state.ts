@@ -2,7 +2,7 @@ import { useReducer, useEffect } from 'react'
 import { Action, Prop } from './types.js'
 import { Warehouse } from './warehouse.js'
 
-const reducer = (state:boolean) => !state; // Simplified reducer
+const reducer = (state:boolean) => !state; 
 
 export function useSubscriberState<T extends object, K extends { [key in keyof K]: Action }>(
   props: Prop,

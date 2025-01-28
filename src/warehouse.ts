@@ -1,5 +1,5 @@
 
-import { createWarehouse, update } from 'subscribe_state';
+import { createWarehouse, update } from '../lib/' //'subscriber_state'
 
 type State = {
   counter: number,

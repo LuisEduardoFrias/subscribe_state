@@ -1,8 +1,10 @@
 
-import {useSubscriberState} from 'subscribe_state'
+import { useSubscriberState } from '../lib/' //'subscriber_state'
+import { useChangeColor } from './use_change_color' //'subscriber_state'
 
 export default function ThemeDark() {
   const [{ darkMode }] = useSubscriberState(['darkMode']);
+const color = useChangeColor();
 
   const _Style = {
     backgroundColor: darkMode ? 'black' : 'white',
@@ -13,7 +15,7 @@ export default function ThemeDark() {
 
   return (
     <div style={_Style} >
-
+      <div style={{ backgroundColor: color, width: '30px', height: '30px' }}></div>
       <h2>{'Ejemplos de texto para etiquetas <p>'}</h2>
 
       <h3>Opciones generales:</h3>

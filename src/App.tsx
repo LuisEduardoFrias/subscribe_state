@@ -6,7 +6,7 @@ import InsertText from './insert_text'
 import ShowText from './show_text'
 import './App.css'
 
-import { useActions } from 'subscribe_state'
+import { useActions } from '../lib/' //'subscriber_state'
 
 function App() {
   const { onIncrementCounter } = useActions(["onIncrementCounter"]);

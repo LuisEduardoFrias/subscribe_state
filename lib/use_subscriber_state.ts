@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'react'
+import { useReducer } from 'react'
 import { Action, Prop } from './types.js'
 import { Warehouse } from './warehouse.js'
 
@@ -14,7 +14,7 @@ export function useSubscriberState<T extends object, K extends { [key in keyof K
   // Get component name 
   const componentName = new Error().stack?.split('\n')[2].trim().split(' ')[1] ?? crypto.randomUUID();
 
-  const [state, forceUpdate] = useReducer(reducer, false);
+  const [_, forceUpdate] = useReducer(reducer, false);
 
   warehouse.setSubscriber(
     {

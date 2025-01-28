@@ -1,10 +1,14 @@
 lib/
 !dist/lib/
 test/
+src/
+public/
 coverage
 node_modules
 .gitignore
 vite.config.js
 tsconfig.json
 index.ts
+index.html
 package-lock.json
+addprofile.json

@@ -12,20 +12,28 @@
     "skipLibCheck": true,
     "rootDir": "./lib",
     "outDir": "./dist",
-    "declaration": true,
+    "": true,
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noEmit": true,
+    //"noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": "./" /* Especificar el directorio base para resolver nombres de módulos no relativos. */,
+    // "rootDirs": [],                                   /* Permitir que varias carpetas se traten como una al resolver módulos. */
+    "typeRoots": [
+      "node_modules/@types"
+    ] /* Especificar varias carpetas que actúan como './node_modules/@types'. */,
+    "types": [
+      "node"
+    ],
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
+    //"noUncheckedSideEffectImports": true,
     "forceConsistentCasingInFileNames": true /* Asegurar que la mayúscula y minúscula sean correctas en las importaciones. */,
     "noImplicitAny": true /* Habilitar la generación de errores para expresiones y declaraciones con un tipo 'any' implícito. */,
     "strictNullChecks": true /* Al realizar comprobaciones de tipos, tener en cuenta 'null' y 'undefined'. */,

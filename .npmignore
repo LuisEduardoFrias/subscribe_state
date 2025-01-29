@@ -12,3 +12,9 @@ index.ts
 index.html
 package-lock.json
 addprofile.json
+eslint.config.js
+tsconfig.app.json
+tsconfig.node.json
+vite.config.d.ts
+vite.config.js.map
+vite.config.ts

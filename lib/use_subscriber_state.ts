@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useReducer, useMemo, useCallback } from 'react'
 import { Action, Prop } from './types.js'
 import { Warehouse } from './warehouse.js'
 import { v4 as uuidv4 } from 'uuid';
@@ -7,14 +7,13 @@ const reducer = (state: boolean) => !state;
 
 export function useSubscriberState<T extends object, K extends { [key in keyof K]: Action }>(
   props: Prop,
-  notNotify: boolean = false
+  notNotify: boolean = false,
+  uuid: string,
 ): [Partial<T>, { [key in keyof K]: Action }] {
 
   const warehouse = Warehouse.getInstance<T, K>();
 
   // Get component name 
-
-  const uuid = uuidv4();
 
   /*
   let uuid = '';
@@ -27,18 +26,26 @@ export function useSubscriberState<T extends object, K extends { [key in keyof K
   }
   */
 
-  const componentName = `${new Error().stack?.split('\n')[2].trim().split(' ')[1]}-${uuid}`;
+  const componentName = useMemo(() => {
+    return `${new Error().stack
+      ?.split('\n')[2]
+      .trim().split(' ')[1]}-${uuid ?? uuidv4()}`
+  }, [uuid]);
 
   const [_, forceUpdate] = useReducer(reducer, false);
 
-  warehouse.setSubscriber(
-    {
-      props: Array.isArray(props) ? props : [props],
-      dispatch: forceUpdate,
-      notNotify,
-    },
-    componentName
-  );
+  const subscriber = useCallback(() => {
+    warehouse.setSubscriber(
+      {
+        props: Array.isArray(props) ? props : [props],
+        dispatch: forceUpdate,
+        notNotify
+      },
+      componentName
+    );
+  }, [props])
+
+  subscriber();
 
   return [
     warehouse.getGlobalStateBySubscriber(componentName),

@@ -1,148 +1,109 @@
 import { describe, it, expect } from 'vitest'
 import { renderHook, act } from '@testing-library/react';
-import /* useInitialize,*/ { Initialize } from "../lib/initialize_super_state"
-//import useSubscribeState, { dispatch } from "../lib/subscribe_state"
-import useInitialize, { useSubscribeState, dispatch } from "../index"
+import { useActions, update, useSubscriberState, createWarehouse } from "../lib/index.ts"
 
-/*
-    function changeName(name: string) {
-        console.log("--------------")
-        this.name = name;
-    }
- 
-    class Direction {
-        constructor(stret: string, numb: number) {
-            this.stret = stret;
-            this.numb = numb;
-            this.obj = { name: "carlo", skills: ["sk1", "sk2"] };
-        }
-    }
- 
-    class Skill {
-        constructor(name: string, rank: number) {
-            this.name = name;
-            this.rank = rank;
-        }
-    }
- 
-    class Persona {
- 
-        private static _instance: Persona;
- 
-        public static getInstance(): Persona {
-            if (!Persona._instance) {
-                Persona._instance = new Persona();
-            }
- 
-            return Persona._instance;
-        }
- 
-        constructor() {
-            this.name = "luis";
-            this.age = 29;
-            this.isJob = false;
-            this.skills = [new Skill("c#", 8.7), new Skill("react", 5.6)];
-            this.direction = new Direction("c", 29);
-            this.otros = ["primero", "segundo", "tercero"];
-        }
- 
-        public clone(): this {
-            return structuredClone(this)
-        }
-    }
-*/
-
-type MyInfo = {
-    name: string,
-    lastName: string,
-    age: number,
-    //changeName: () => void
-    //changeLastName: () => void
+type myState = {
+	name: string,
+	lastName: string,
+	age: number,
 }
 
-type Action =
-    { type: "changeName", name: string } |
-    { type: "changeLastName", lastName: string } |
-    { type: "changeAge", age: number }
-
-const reducer = (state: MyInfo, action: Action) => {
-    const actions = {
-        changeName: () => {
-            return { ...state, name: action.name }
-        },
-        changeLastName: () => {
-            return { ...state, lastName: action.lastName }
-        },
-        changeAge: () => {
-            return { ...state, age: action.age }
-        },
-        default: () => {
-            throw new Error(`La accion ${action.type} no es valida.`);
-        }
-    }
-
-    return (actions[action.type] ?? actions["default"])()
+type myActions = {
+	changeName: (name: string) => void,
+	changeLastName: (lastName: string) => void,
+	changeAge: (age: number) => void
 }
 
-const myInfo: MyInfo = {
-    name: "luis",
-    lastName: "frias",
-    age: 29,
-    //changeName: () => { console.log("se ejecuto changeName"); },
-    //changeLastName: () => { console.log("se ejecuto changeLastName"); }
+function changeName(name: string) {
+	update((state: myState): myState => ({ ...state, name }));
+};
+
+function changeLastName(lastName: string) {
+	update((state: myState): myState => ({ ...state, lastName }));
+};
+
+function changeAge(age: number) {
+	update((state: myState): myState => ({ ...state, age }));
+};
+
+const initState = {
+	name: "luis",
+	lastName: "frias",
+	age: 29,
 }
+
+const state = {
+	...initState,
+	changeName,
+	changeLastName,
+	changeAge
+}
+
 
 describe('Pruebas del funcionamiento externo', () => {
 
-    it('Lanza error al no pasar los parametros requeridos.', () => {
-        expect(() => useInitialize<MyInfo>()).toThrowError('The reducer parameter is required for instance Initialize.\nThe initialState parameter is required for instance Initialize.')
-        expect(() => useInitialize<MyInfo>(reducer)).toThrowError('The initialState parameter is required for instance Initialize.')
-    })
+	it('Lanza error al no pasar los parametros requeridos.', () => {
+		expect(() => createWarehouse<myState, myActions>()).toThrowError("You must provide a value for the 'initialState' argument.")
+		expect(() => createWarehouse(state)).not.toThrowError();
+	})
 
-    it('El useInitialize no debe lazar error.', () => {
-        expect(() => useInitialize<MyInfo>(reducer, myInfo)).not.toThrowError()
-    })
+	it('El useInitialize no debe lazar error.', () => {
+		expect(() => createWarehouse<myState, myActions>(state)).not.toThrowError()
+	})
 
-    it('El primer valor de la tupla es un object.', () => {
-        const { result } = renderHook(() => useSubscribeState([]));
-        expect(result.current[0]).toBeTypeOf("object");
-    })
+	it('El primer valor de la tupla es un object.', () => {
+		const { result } = renderHook(() => useSubscriberState<myState, myActions>())
+		expect(result.current[0]).toBeTypeOf("object");
+	})
 
-    it('El segundo valor de la tupla es una funcion.', () => {
-        const { result } = renderHook(() => useSubscribeState([]));
-        expect(result.current[1]).toBeTypeOf("function");
-    })
+	it('El segundo valor de la tupla es una funcion.', () => {
+		const { result } = renderHook(() => useSubscriberState<myState, myActions>());
+		expect(result.current[1]).toBeTypeOf("object");
+	})
 
-    it('El objecto retornado debe ser igual a {}.', () => {
-        const { result } = renderHook(() => useSubscribeState([]));
-        expect(result.current[0]).toStrictEqual({});
-    })
+	it('El objecto retornado debe ser igual a', () => {
+		const { result } = renderHook(() => useSubscriberState<myState, myActions>([]));
+		expect(result.current[0]).toStrictEqual({});
+	})
 
-    it('El objecto retornado debe ser igual a  myInfo.', () => {
-        const { result } = renderHook(() => useSubscribeState(["all"]));
-        expect(result.current[0]).toEqual(myInfo);
-    })
 
-    it('Cambia el valor de la propiedad \'name\' por \'jose\'.', () => {
-        const { result } = renderHook(() => useSubscribeState(["name"]));
-        act(() => result.current[1]({ type: "changeName", name: "jose" }));
-        expect(result.current[0].name).toBe("jose");
-    })
+	it('El objecto retornado debe ser igual a  mnfo.', () => {
+		const { result } = renderHook(() => useSubscriberState<myState, myActions>(["all"]));
+		expect(result.current[0]).toEqual(initState);
+	})
 
-    it('La propiedad \'age\' no debe existir.', () => {
-        const { result } = renderHook(() => useSubscribeState(["name"]));
-        expect(result.current[0].age).toBeUndefined();
-    })
-})
+	it('Cambia el valor de la propiedad \'name\' por \'jose\'.', () => {
+		const { result } = renderHook(() => useSubscriberState<myState, myActions>(["name"]));
+		act(() => result.current[1].changeName("jose"));
+		expect(result.current[0].name).toBe("jose");
+	})
 
-describe('Pruebas del funcionamiento interno.', () => {
+	it('La propiedad \'age\' no debe existir.', () => {
+		const { result } = renderHook(() => useSubscriberState<myState, myActions>(["name"]));
+		expect(result.current[0].age).toBeUndefined();
+	})
 
-    it('Retorna una instancia de Initialize.', () => {
-        expect(Initialize.getInstance()).toBeInstanceOf(Initialize)
-    })
+	it('La.', () => {
+		const { result } = renderHook(() => useActions<myActions>());
+		expect(result.current).toBeTypeOf("object");
+	})
 
-    it('Verificar que se inivializo el estado global.', () => {
-        const initialized: Initialize = Initialize.getInstance();
-        expect(initialized.globalState).toEqual(myInfo)
-    })
+	it('La 2.', () => {
+		const { result } = renderHook(() => useActions<myActions>());
+		act(() => result.current.changeName("carlos"));
+	})
+
+	it('La 3.', () => {
+		const { result } = renderHook(() => useSubscriberState<myState, myActions>(["name"]));
+		expect(result.current[0].name).toBe("carlos");
+	})
+
+	it('La 4.', () => {
+		act(() => update((state: myState): myState => ({ ...state, name:'maikol' })));
+	})
+	
+	it('La 5.', () => {
+		const { result } = renderHook(() => useSubscriberState<myState, myActions>(["name"]));
+		expect(result.current[0].name).toBe("maikol");
+	})
 })

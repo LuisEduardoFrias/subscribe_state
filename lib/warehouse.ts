@@ -1,36 +1,37 @@
 
-import { Action, Subscribers, Subscriber, ALL } from './types'
+import { Action, Subscribers, Subscriber, ALL } from './types.js';
 
 export class Warehouse<T extends object, K extends { [key in keyof K]: Action }> {
   private _globalState: T;
   private _Actions: { [key in keyof K]: Action };
   private _subscriber: Subscribers;
 
-  private static _instance: Initialize<J, I>;
+  private static _instance: Warehouse<any, any>;
 
-  public static getInstance<J extends object, I extends { [key in keyof I]: Action }>(initialState?: J & I): Initialize<J, I> {
+  public static getInstance<J extends object, I extends { [key in keyof I]: Action }>(initialState?: J & I): Warehouse<J, I> {
 
-    if (Initialize._instance) {
+    if (!Warehouse._instance) {
       if (!initialState) throw new Error("You must provide a value for the 'initialState' argument.");
 
-      Initialize._instance = new Initialize<J, I>(initialState);
+      Warehouse._instance = new Warehouse<J, I>(initialState);
     }
 
-    return Initialize._instance
+    return Warehouse._instance;
   }
 
   private constructor(initialState: T & K) {
     const [state, actions] = this.splitState(initialState);
 
-    this._globalState = state;
-    this._Actions = actions;
+    this._globalState = state as T;
+    this._Actions = actions as K;
+    this._subscriber = {} as Subscribers;
   }
 
   public get globalState(): T {
     return this._globalState;
   }
 
-  public get actions(): K {
+  public get actions(): { [key in keyof K]: Action } {
     return this._Actions;
   }
 
@@ -39,41 +40,47 @@ export class Warehouse<T extends object, K extends { [key in keyof K]: Action }>
   }
 
   public setSubscriber(subscriber: Subscriber, componentName: string) {
-    Reflect.set(this._subscriber, componentName, subscriber);
+    this._subscriber[componentName] = subscriber;
   }
 
-  private splitState(initialState: T & K): [T, K] {
-    throw new ERROR('completa en splitState')
-    return [{} as T, {} as K]
+  private splitState<T extends object, K extends { [key in keyof K]: Action }>(initialState: T & K): [T, K] {
+    const state: T = {} as T;
+    const functions: K = {} as K;
+    type TKeys = keyof T;
+    type KKeys = keyof K;
+
+    for (const key in initialState) {
+      if (typeof initialState[key as TKeys & KKeys] === 'function') {
+        functions[key as KKeys] = initialState[key as KKeys] as K[KKeys];
+      } else {
+        state[key as TKeys] = initialState[key as TKeys] as T[TKeys];
+      }
+    }
+
+    return [state, functions];
   }
 
   //returns the state with the specific properties of a subscriber
-  public getGlobalStateBySubscriber(componentName: string) {
-
-    let newState: { [key in keyof T]: any } = {} as { [key in keyof T]: any };
-
+  public getGlobalStateBySubscriber(componentName: string): Partial<T> {
     const subscriber = Reflect.get(this._subscriber, componentName);
 
-    if (!subscriber) throw new Error(`The subscriber ${componentName} not exists.`);
+    if (!subscriber) throw new Error(`The subscriber '${componentName}' not exists.`);
 
-    const props: string[] = subscriber.props;
-
-    for (const prop of props) {
-      if (prop === ALL) {
-        return this.globalState;
-        break;
-      }
-
-      Reflect.set(newState, prop, this.globalState[prop as keyof T]);
+    if (subscriber.props.includes(ALL)) {
+      return structuredClone(this.globalState);
     }
 
-    return newState as T;
+    const newState: Partial<T> = {};
+    for (const prop of subscriber.props) {
+      newState[prop as keyof T] = this.globalState[prop as keyof T];
+    }
+
+    return structuredClone(newState);
   }
 
   public updateGlobalState(newState: T, modifiedProperties: (keyof T)[]): void {
-    let key: keyof T;
-    for (key of modifiedProperties) {
-      Reflext.set(this._globalState, key, newState[key]);
+    for (const key of modifiedProperties) {
+      this._globalState[key] = newState[key];
     }
   }
 }

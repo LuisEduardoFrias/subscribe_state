@@ -1,7 +1,7 @@
 
 export const ALL = 'all';
 
-export type Action = (value?: any) => void;
+//export type Action = (arg: object | string | number | boolean | symbol) => void;
 
 export type Subscribers = { [key: string]: Subscriber };
 

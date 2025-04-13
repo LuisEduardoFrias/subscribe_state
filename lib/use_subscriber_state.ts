@@ -1,54 +1,47 @@
 import { useReducer, useMemo, useCallback } from 'react'
-import { Action, Prop } from './types.js'
+import { Prop } from './types.js'
 import { Warehouse } from './warehouse.js'
 import { v4 as uuidv4 } from 'uuid';
 
 const reducer = (state: boolean) => !state;
 
-export function useSubscriberState<T extends object, K extends { [key in keyof K]: Action }>(
-  props: Prop,
-  notNotify: boolean = false,
-  uuid: string,
-): [Partial<T>, { [key in keyof K]: Action }] {
+export function useSubscriberState<T extends object, K>(
+	props: Prop,
+	notNotify: boolean = false,
+	uuid?: string,
+): [T,  K] {
 
-  const warehouse = Warehouse.getInstance<T, K>();
+	const warehouse = Warehouse.getInstance<T, K>();
 
-  // Get component name 
+	// Get component name 
+	//crypto-ramdom-uuid
+	if (!uuid) {
+		uuid = crypto.randomUUID();
+	}
 
-  /*
-  let uuid = '';
+	const componentName = useMemo(() => {
+		return `${new Error().stack
+			?.split('\n')[2]
+			.trim().split(' ')[1]}-${uuid ?? uuidv4()}`
+	}, [uuid]);
 
-  if (typeof crypto === 'undefined' || crypto.randomUUID === undefined) {
-    const cryptoRandomUUID = require('crypto-random-uuid');
-    uuid = cryptoRandomUUID();
-  } else {
-    uuid = crypto.randomUUID();
-  }
-  */
+	const [_, forceUpdate] = useReducer(reducer, false);
 
-  const componentName = useMemo(() => {
-    return `${new Error().stack
-      ?.split('\n')[2]
-      .trim().split(' ')[1]}-${uuid ?? uuidv4()}`
-  }, [uuid]);
+	const subscriber = useCallback(() => {
+		warehouse.setSubscriber(
+			{
+				props: Array.isArray(props) ? props : [props],
+				dispatch: forceUpdate,
+				notNotify
+			},
+			componentName
+		);
+	}, [props, warehouse, notNotify, componentName])
 
-  const [_, forceUpdate] = useReducer(reducer, false);
+	subscriber();
 
-  const subscriber = useCallback(() => {
-    warehouse.setSubscriber(
-      {
-        props: Array.isArray(props) ? props : [props],
-        dispatch: forceUpdate,
-        notNotify
-      },
-      componentName
-    );
-  }, [props])
-
-  subscriber();
-
-  return [
-    warehouse.getGlobalStateBySubscriber(componentName),
-    warehouse.actions,
-  ];
+	return [
+		warehouse.getGlobalStateBySubscriber(componentName),
+		warehouse.actions,
+	];
 }

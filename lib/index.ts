@@ -1,6 +1,6 @@
 
 import { useActions, update } from './helpers.js'
-export { type Action, type Update } from './types.js'
+export {  type Update } from './types.js'
 import { useSubscriberState } from './use_subscriber_state.js'
 import { createWarehouse } from './helpers.js'
 
